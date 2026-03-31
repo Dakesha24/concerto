@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Phy-FA-CAT</title>
+    <title>Dashboard Admin &mdash; CONCERTO</title>
 
     <link rel="icon" type="image/png" href="<?= base_url('assets/images/icon-cat.png') ?>">
     <link rel="apple-touch-icon" href="<?= base_url('assets/images/icon-cat.png') ?>">
@@ -131,45 +131,73 @@
         }
 
         .sidebar .nav-link {
-            color: #424242;
-            padding: 1rem 1.5rem;
+            color: #374151;
+            padding: 0.65rem 1rem;
             display: flex;
             align-items: center;
-            transition: all 0.3s;
-            border-radius: 0.5rem;
-            margin: 0.2rem 0.8rem;
+            gap: 0.75rem;
+            transition: all 0.2s;
+            border-radius: 8px;
+            margin: 0.1rem 0.75rem;
+            font-size: 0.88rem;
+            font-weight: 500;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #e3f2fd;
-            color: #1565c0;
+            background-color: rgba(0, 81, 186, 0.07);
+            color: #0051ba;
         }
 
         .sidebar .nav-link.active {
-            background-color: #1565c0;
-            color: white;
+            background: linear-gradient(135deg, #001a4f 0%, #0051ba 100%);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,81,186,.25);
+        }
+
+        .sidebar .nav-link.active i {
+            color: #ffda1a;
         }
 
         .sidebar .nav-link i {
-            font-size: 1.2rem;
-            margin-right: 1rem;
+            font-size: 1rem;
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
         }
 
         .sidebar-section {
-            padding: 0.5rem 1.5rem;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #6c757d;
+            padding: 0.35rem 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #9ca3af;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .sidebar-divider {
             border: none;
             height: 1px;
-            background-color: #e9ecef;
-            margin: 0.5rem 1rem;
+            background-color: #f3f4f6;
+            margin: 0.5rem 1.25rem;
+        }
+
+        .sidebar-brand-strip {
+            padding: 1rem 1.5rem 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .sbs-admin {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            background: #f8faff;
+            border: 1px solid rgba(0,81,186,.12);
+            border-radius: 4px;
+            padding: 2px 8px;
         }
 
         .content-wrapper {
@@ -345,7 +373,10 @@
     <div class="nav-overlay" id="navOverlay"></div>
 
     <div class="sidebar" id="sidebar">
-        <ul class="nav flex-column mt-3">
+        <div class="sidebar-brand-strip">
+            <span class="sbs-admin">Admin</span>
+        </div>
+        <ul class="nav flex-column mt-2">
             <!-- Dashboard -->
             <li class="nav-item">
                 <a href="<?= base_url('admin/dashboard') ?>" class="nav-link <?= current_url() == base_url('admin/dashboard') ? 'active' : '' ?>">

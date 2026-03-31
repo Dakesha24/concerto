@@ -3,371 +3,347 @@
 <?= $this->section('title') ?>Hasil Ujian<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+<div class="pg-wrap">
 
-<br><br><br>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">
-                        <i class="fas fa-chart-bar"></i> Daftar Hasil Ujian
-                    </h4>
-                    <div>
-                        <a href="<?= base_url('admin/ujian') ?>" class="btn btn-info me-2">
-                            <i class="fas fa-file-alt me-1"></i>Kelola Ujian
-                        </a>
-                        <a href="<?= base_url('admin/jadwal') ?>" class="btn btn-secondary">
-                            <i class="fas fa-calendar me-1"></i>Jadwal Ujian
-                        </a>
-                    </div>
+    <div class="pg-header">
+        <div>
+            <p class="pg-eyebrow">Monitoring</p>
+            <h1 class="pg-title">Hasil Ujian</h1>
+            <p class="pg-sub">Pantau progress dan hasil ujian dari seluruh kelas.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a href="<?= base_url('admin/ujian') ?>" class="btn-back">
+                <i class="bi bi-file-earmark-text me-1"></i>Kelola Ujian
+            </a>
+            <a href="<?= base_url('admin/jadwal') ?>" class="btn-back">
+                <i class="bi bi-calendar-event me-1"></i>Jadwal Ujian
+            </a>
+        </div>
+    </div>
+
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="alert-pg alert-pg--success">
+            <i class="bi bi-check-circle-fill me-2"></i><?= session()->getFlashdata('success') ?>
+            <button class="alert-pg-close" data-bs-dismiss="alert">&times;</button>
+        </div>
+    <?php endif; ?>
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert-pg alert-pg--danger">
+            <i class="bi bi-exclamation-circle-fill me-2"></i><?= session()->getFlashdata('error') ?>
+            <button class="alert-pg-close" data-bs-dismiss="alert">&times;</button>
+        </div>
+    <?php endif; ?>
+
+    <!-- Legend -->
+    <div class="legend-bar">
+        <span class="pg-badge pg-badge--gray me-1">Belum Mulai</span> Ujian belum dimulai &nbsp;&nbsp;
+        <span class="pg-badge pg-badge--yellow me-1">Sedang Berlangsung</span> Ujian sedang berlangsung &nbsp;&nbsp;
+        <span class="pg-badge pg-badge--green me-1">Selesai</span> Ujian telah selesai
+    </div>
+
+    <?php if (empty($daftarUjian)): ?>
+        <div class="tbl-card">
+            <div class="tbl-empty">
+                <i class="bi bi-bar-chart"></i>
+                <p>Belum ada ujian terjadwal</p>
+                <p style="font-size:.8rem;color:#9ca3af">Daftar ujian akan muncul setelah ada jadwal ujian yang dibuat.</p>
+            </div>
+        </div>
+    <?php else: ?>
+        <!-- Filter Bar -->
+        <div class="filter-card">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="filter-label">Cari</label>
+                    <input type="text" class="f-input" id="searchUjian" placeholder="Nama ujian...">
                 </div>
-                <div class="card-body">
-                    <?php if (session()->getFlashdata('success')): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= session()->getFlashdata('success') ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (session()->getFlashdata('error')): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= session()->getFlashdata('error') ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Info Status Legend -->
-                    <div class="alert alert-info mb-4">
-                        <h6 class="alert-heading"><i class="fas fa-info-circle me-1"></i>Keterangan Status:</h6>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <span class="badge bg-secondary me-1">Belum Mulai</span> - Ujian belum dimulai
-                            </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-warning me-1">Sedang Berlangsung</span> - Ujian sedang berlangsung
-                            </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-success me-1">Selesai</span> - Ujian telah selesai
-                            </div>
-                        </div>
-                    </div>
-
-                    <?php if (empty($daftarUjian)): ?>
-                        <div class="text-center py-5">
-                            <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">Belum ada ujian terjadwal</h5>
-                            <p class="text-muted">Daftar ujian akan muncul setelah ada jadwal ujian yang dibuat.</p>
-                        </div>
-                    <?php else: ?>
-                        <!-- Filter -->
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" id="searchUjian" placeholder="Cari nama ujian...">
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="filterSekolah">
-                                    <option value="">Semua Sekolah</option>
-                                    <?php
-                                    $sekolahUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_sekolah')));
-                                    foreach ($sekolahUnique as $sekolah): ?>
-                                        <option value="<?= esc($sekolah) ?>"><?= esc($sekolah) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="filterKelas">
-                                    <option value="">Semua Kelas</option>
-                                    <?php
-                                    $kelasUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_kelas')));
-                                    foreach ($kelasUnique as $kelas): ?>
-                                        <option value="<?= esc($kelas) ?>"><?= esc($kelas) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="filterStatus">
-                                    <option value="">Semua Status</option>
-                                    <option value="belum_mulai">Belum Mulai</option>
-                                    <option value="sedang_berlangsung">Sedang Berlangsung</option>
-                                    <option value="selesai">Selesai</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-select" id="filterMatpel">
-                                    <option value="">Semua Mata Pelajaran</option>
-                                    <?php
-                                    $matpelUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_jenis')));
-                                    foreach ($matpelUnique as $matpel): ?>
-                                        <option value="<?= esc($matpel) ?>"><?= esc($matpel) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <button class="btn btn-outline-secondary" onclick="resetFilter()" title="Reset Filter">
-                                    <i class="fas fa-redo"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <?php foreach ($daftarUjian as $ujian): ?>
-                                <div class="col-md-6 mb-4"
-                                    data-sekolah="<?= esc($ujian['nama_sekolah']) ?>"
-                                    data-kelas="<?= esc($ujian['nama_kelas']) ?>"
-                                    data-status="<?= esc($ujian['status_ujian']) ?>"
-                                    data-matpel="<?= esc($ujian['nama_jenis']) ?>">
-                                    <div class="card border-0 shadow-sm h-100">
-                                        <!-- Header dengan informasi sekolah yang prominent -->
-                                        <div class="card-header bg-light border-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <i class="fas fa-school text-primary me-2"></i>
-                                                    <div>
-                                                        <h6 class="mb-0 text-primary fw-bold"><?= esc($ujian['nama_sekolah']) ?></h6>
-                                                        <small class="text-muted">
-                                                            <i class="fas fa-users me-1"></i><?= esc($ujian['nama_kelas']) ?>
-                                                            <?php if ($ujian['tahun_ajaran']): ?>
-                                                                - <?= esc($ujian['tahun_ajaran']) ?>
-                                                            <?php endif; ?>
-                                                        </small>
-                                                    </div>
-                                                </div>
-                                                <span class="badge bg-<?= $ujian['status_class'] ?> fs-6"><?= $ujian['status_text'] ?></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="card-body pt-3">
-                                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                                <div>
-                                                    <h5 class="card-title text-dark mb-1"><?= esc($ujian['nama_ujian']) ?></h5>
-                                                    <span class="badge bg-info"><?= esc($ujian['nama_jenis']) ?></span>
-                                                </div>
-                                            </div>
-
-                                            <p class="card-text text-muted small">
-                                                <?= strlen($ujian['deskripsi']) > 100 ? substr(esc($ujian['deskripsi']), 0, 100) . '...' : esc($ujian['deskripsi']) ?>
-                                            </p>
-
-                                            <!-- Informasi Waktu -->
-                                            <div class="mb-3">
-                                                <div class="text-muted small">
-                                                    <div class="d-flex justify-content-between mb-1">
-                                                        <span><i class="fas fa-calendar me-1"></i>Mulai:</span>
-                                                        <span class="fw-medium"><?= $ujian['tanggal_mulai_format'] ?></span>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between mb-2">
-                                                        <span><i class="fas fa-calendar-check me-1"></i>Selesai:</span>
-                                                        <span class="fw-medium"><?= $ujian['tanggal_selesai_format'] ?></span>
-                                                    </div>
-                                                    <?php if ($ujian['status_ujian'] !== 'selesai'): ?>
-                                                        <div class="d-flex justify-content-between">
-                                                            <span><i class="fas fa-key me-1"></i>Kode Akses:</span>
-                                                            <span class="fw-bold text-primary"><?= esc($ujian['kode_akses']) ?></span>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-
-                                            <!-- Statistik Peserta -->
-                                            <div class="row text-center mb-3">
-                                                <div class="col-3">
-                                                    <div class="border-end">
-                                                        <h6 class="text-success mb-0"><?= $ujian['peserta_selesai'] ?></h6>
-                                                        <small class="text-muted">Selesai</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="border-end">
-                                                        <h6 class="text-warning mb-0"><?= $ujian['peserta_sedang_mengerjakan'] ?></h6>
-                                                        <small class="text-muted">Aktif</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="border-end">
-                                                        <h6 class="text-secondary mb-0"><?= $ujian['peserta_belum_mulai'] ?></h6>
-                                                        <small class="text-muted">Belum</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <h6 class="text-primary mb-0"><?= $ujian['jumlah_peserta'] ?></h6>
-                                                    <small class="text-muted">Total</small>
-                                                </div>
-                                            </div>
-
-                                            <!-- Progress Bar -->
-                                            <?php if ($ujian['jumlah_peserta'] > 0): ?>
-                                                <?php
-                                                $progressSelesai = round(($ujian['peserta_selesai'] / $ujian['jumlah_peserta']) * 100);
-                                                $progressAktif = round(($ujian['peserta_sedang_mengerjakan'] / $ujian['jumlah_peserta']) * 100);
-                                                ?>
-                                                <div class="progress mb-3" style="height: 8px;">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: <?= $progressSelesai ?>%" title="<?= $progressSelesai ?>% Selesai"></div>
-                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $progressAktif ?>%" title="<?= $progressAktif ?>% Sedang Mengerjakan"></div>
-                                                </div>
-                                                <div class="text-center small text-muted mb-3">
-                                                    Progress: <?= $progressSelesai ?>% selesai, <?= $progressAktif ?>% sedang mengerjakan
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <!-- Statistik Waktu (hanya tampil jika ada yang selesai) -->
-                                            <?php if ($ujian['peserta_selesai'] > 0): ?>
-                                                <div class="mb-3">
-                                                    <h6 class="text-muted mb-2"><i class="fas fa-stopwatch me-1"></i>Statistik Waktu:</h6>
-                                                    <div class="text-muted small">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span><i class="fas fa-clock me-1"></i>Rata-rata:</span>
-                                                            <span class="fw-bold text-info"><?= $ujian['rata_rata_durasi_format'] ?></span>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between">
-                                                            <span><i class="fas fa-bolt me-1"></i>Tercepat:</span>
-                                                            <span class="text-success"><?= $ujian['durasi_tercepat_format'] ?></span>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between">
-                                                            <span><i class="fas fa-hourglass me-1"></i>Terlama:</span>
-                                                            <span class="text-warning"><?= $ujian['durasi_terlama_format'] ?></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <!-- Informasi Guru -->
-                                            <div class="text-muted small mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <i class="fas fa-chalkboard-teacher me-2"></i>
-                                                    <span><?= esc($ujian['nama_guru']) ?></span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Action Button -->
-                                            <?php if ($ujian['jumlah_peserta'] > 0): ?>
-                                                <a href="<?= base_url('admin/hasil-ujian/siswa/' . $ujian['jadwal_id']) ?>"
-                                                    class="btn btn-primary w-100">
-                                                    <i class="fas fa-eye me-1"></i>
-                                                    <?php if ($ujian['status_ujian'] === 'selesai'): ?>
-                                                        Lihat Hasil Ujian
-                                                    <?php else: ?>
-                                                        Pantau Progress Ujian
-                                                    <?php endif; ?>
-                                                    <span class="badge bg-light text-primary ms-2"><?= $ujian['peserta_selesai'] ?>/<?= $ujian['jumlah_peserta'] ?></span>
-                                                </a>
-                                            <?php else: ?>
-                                                <button class="btn btn-secondary w-100" disabled>
-                                                    <i class="fas fa-users me-1"></i>Belum Ada Peserta Terdaftar
-                                                </button>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+                <div class="col-md-2">
+                    <label class="filter-label">Sekolah</label>
+                    <select class="f-input" id="filterSekolah">
+                        <option value="">Semua Sekolah</option>
+                        <?php
+                        $sekolahUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_sekolah')));
+                        foreach ($sekolahUnique as $sekolah): ?>
+                            <option value="<?= esc($sekolah) ?>"><?= esc($sekolah) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="filter-label">Kelas</label>
+                    <select class="f-input" id="filterKelas">
+                        <option value="">Semua Kelas</option>
+                        <?php
+                        $kelasUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_kelas')));
+                        foreach ($kelasUnique as $kelas): ?>
+                            <option value="<?= esc($kelas) ?>"><?= esc($kelas) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="filter-label">Status</label>
+                    <select class="f-input" id="filterStatus">
+                        <option value="">Semua Status</option>
+                        <option value="belum_mulai">Belum Mulai</option>
+                        <option value="sedang_berlangsung">Sedang Berlangsung</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="filter-label">Mata Pelajaran</label>
+                    <select class="f-input" id="filterMatpel">
+                        <option value="">Semua</option>
+                        <?php
+                        $matpelUnique = array_unique(array_filter(array_column($daftarUjian, 'nama_jenis')));
+                        foreach ($matpelUnique as $matpel): ?>
+                            <option value="<?= esc($matpel) ?>"><?= esc($matpel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn-reset w-100" onclick="resetFilter()" title="Reset Filter">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="row g-3" id="hasilGrid">
+            <?php foreach ($daftarUjian as $ujian): ?>
+                <div class="col-md-6 h-card-wrap"
+                    data-sekolah="<?= esc($ujian['nama_sekolah']) ?>"
+                    data-kelas="<?= esc($ujian['nama_kelas']) ?>"
+                    data-status="<?= esc($ujian['status_ujian']) ?>"
+                    data-matpel="<?= esc($ujian['nama_jenis']) ?>">
+                    <div class="h-card">
+                        <!-- Card Header: Sekolah & Status -->
+                        <div class="h-card-header">
+                            <div class="h-school-info">
+                                <div class="h-school-icon"><i class="bi bi-building"></i></div>
+                                <div>
+                                    <p class="h-school-name"><?= esc($ujian['nama_sekolah']) ?></p>
+                                    <p class="h-school-kelas">
+                                        <i class="bi bi-people me-1"></i><?= esc($ujian['nama_kelas']) ?>
+                                        <?php if ($ujian['tahun_ajaran']): ?> &middot; <?= esc($ujian['tahun_ajaran']) ?><?php endif; ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="pg-badge <?= 'pg-badge--' . $ujian['status_class'] ?>"><?= $ujian['status_text'] ?></span>
+                        </div>
+
+                        <div class="h-card-body">
+                            <!-- Judul & Mapel -->
+                            <h5 class="h-title"><?= esc($ujian['nama_ujian']) ?></h5>
+                            <span class="pg-badge" style="margin-bottom:.75rem;display:inline-block"><?= esc($ujian['nama_jenis']) ?></span>
+
+                            <p class="h-desc"><?= strlen($ujian['deskripsi']) > 100 ? substr(esc($ujian['deskripsi']), 0, 100) . '…' : esc($ujian['deskripsi']) ?></p>
+
+                            <!-- Waktu -->
+                            <div class="h-time-row">
+                                <div class="h-time-item">
+                                    <span class="h-time-label"><i class="bi bi-calendar-check me-1"></i>Mulai</span>
+                                    <span class="h-time-val"><?= $ujian['tanggal_mulai_format'] ?></span>
+                                </div>
+                                <div class="h-time-item">
+                                    <span class="h-time-label"><i class="bi bi-calendar-x me-1"></i>Selesai</span>
+                                    <span class="h-time-val"><?= $ujian['tanggal_selesai_format'] ?></span>
+                                </div>
+                            </div>
+
+                            <?php if ($ujian['status_ujian'] !== 'selesai'): ?>
+                                <div class="h-akses">
+                                    <span class="h-time-label"><i class="bi bi-key me-1"></i>Kode Akses:</span>
+                                    <span class="h-akses-val"><?= esc($ujian['kode_akses']) ?></span>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Statistik Peserta -->
+                            <div class="h-stats">
+                                <div class="h-stat">
+                                    <span class="h-stat-val h-stat-green"><?= $ujian['peserta_selesai'] ?></span>
+                                    <span class="h-stat-label">Selesai</span>
+                                </div>
+                                <div class="h-stat">
+                                    <span class="h-stat-val h-stat-yellow"><?= $ujian['peserta_sedang_mengerjakan'] ?></span>
+                                    <span class="h-stat-label">Aktif</span>
+                                </div>
+                                <div class="h-stat">
+                                    <span class="h-stat-val" style="color:#6b7280"><?= $ujian['peserta_belum_mulai'] ?></span>
+                                    <span class="h-stat-label">Belum</span>
+                                </div>
+                                <div class="h-stat">
+                                    <span class="h-stat-val" style="color:#0051ba"><?= $ujian['jumlah_peserta'] ?></span>
+                                    <span class="h-stat-label">Total</span>
+                                </div>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <?php if ($ujian['jumlah_peserta'] > 0): ?>
+                                <?php
+                                $pSelesai = round(($ujian['peserta_selesai'] / $ujian['jumlah_peserta']) * 100);
+                                $pAktif   = round(($ujian['peserta_sedang_mengerjakan'] / $ujian['jumlah_peserta']) * 100);
+                                ?>
+                                <div class="h-progress">
+                                    <div style="height:6px;background:#f1f5f9;border-radius:4px;overflow:hidden;display:flex">
+                                        <div style="width:<?= $pSelesai ?>%;background:#16a34a;transition:width .3s"></div>
+                                        <div style="width:<?= $pAktif ?>%;background:#f59e0b;transition:width .3s"></div>
+                                    </div>
+                                    <p class="h-progress-label"><?= $pSelesai ?>% selesai<?= $pAktif ? ', ' . $pAktif . '% sedang mengerjakan' : '' ?></p>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Statistik Waktu -->
+                            <?php if ($ujian['peserta_selesai'] > 0): ?>
+                                <div class="h-time-stats">
+                                    <p class="h-time-stats-title"><i class="bi bi-stopwatch me-1"></i>Statistik Waktu</p>
+                                    <div class="h-time-row">
+                                        <div class="h-time-item">
+                                            <span class="h-time-label">Rata-rata</span>
+                                            <span class="h-time-val" style="color:#0051ba"><?= $ujian['rata_rata_durasi_format'] ?></span>
+                                        </div>
+                                        <div class="h-time-item">
+                                            <span class="h-time-label">Tercepat</span>
+                                            <span class="h-time-val" style="color:#16a34a"><?= $ujian['durasi_tercepat_format'] ?></span>
+                                        </div>
+                                        <div class="h-time-item">
+                                            <span class="h-time-label">Terlama</span>
+                                            <span class="h-time-val" style="color:#d97706"><?= $ujian['durasi_terlama_format'] ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Guru -->
+                            <p class="h-guru"><i class="bi bi-person-video3 me-1"></i><?= esc($ujian['nama_guru']) ?></p>
+                        </div>
+
+                        <!-- Action -->
+                        <div class="h-card-footer">
+                            <?php if ($ujian['jumlah_peserta'] > 0): ?>
+                                <a href="<?= base_url('admin/hasil-ujian/siswa/' . $ujian['jadwal_id']) ?>" class="btn-submit w-100" style="text-decoration:none;justify-content:center">
+                                    <i class="bi bi-eye me-1"></i>
+                                    <?= $ujian['status_ujian'] === 'selesai' ? 'Lihat Hasil Ujian' : 'Pantau Progress Ujian' ?>
+                                    <span class="pg-badge" style="background:rgba(255,255,255,.2);color:#fff;margin-left:4px"><?= $ujian['peserta_selesai'] ?>/<?= $ujian['jumlah_peserta'] ?></span>
+                                </a>
+                            <?php else: ?>
+                                <button class="btn-cancel w-100" disabled style="justify-content:center;opacity:.6;cursor:default">
+                                    <i class="bi bi-people me-1"></i>Belum Ada Peserta Terdaftar
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
 </div>
 
-<script>
-    // Filter functionality
-    document.getElementById('searchUjian').addEventListener('keyup', filterCards);
-    document.getElementById('filterSekolah').addEventListener('change', filterCards);
-    document.getElementById('filterKelas').addEventListener('change', filterCards);
-    document.getElementById('filterStatus').addEventListener('change', filterCards);
-    document.getElementById('filterMatpel').addEventListener('change', filterCards);
-
-    function filterCards() {
-        const searchText = document.getElementById('searchUjian').value.toLowerCase();
-        const sekolahFilter = document.getElementById('filterSekolah').value;
-        const kelasFilter = document.getElementById('filterKelas').value;
-        const statusFilter = document.getElementById('filterStatus').value;
-        const matpelFilter = document.getElementById('filterMatpel').value;
-        const cards = document.querySelectorAll('.col-md-6[data-sekolah][data-status]');
-
-        cards.forEach(card => {
-            const namaUjian = card.querySelector('.card-title').textContent.toLowerCase();
-            const sekolah = card.getAttribute('data-sekolah');
-            const kelas = card.getAttribute('data-kelas');
-            const status = card.getAttribute('data-status');
-            const matpel = card.getAttribute('data-matpel');
-
-            const textMatch = !searchText || namaUjian.includes(searchText);
-            const sekolahMatch = !sekolahFilter || sekolah === sekolahFilter;
-            const kelasMatch = !kelasFilter || kelas === kelasFilter;
-            const statusMatch = !statusFilter || status === statusFilter;
-            const matpelMatch = !matpelFilter || matpel === matpelFilter;
-
-            card.style.display = (textMatch && sekolahMatch && kelasMatch && statusMatch && matpelMatch) ? '' : 'none';
-        });
-    }
-
-    function resetFilter() {
-        document.getElementById('searchUjian').value = '';
-        document.getElementById('filterSekolah').value = '';
-        document.getElementById('filterKelas').value = '';
-        document.getElementById('filterStatus').value = '';
-        document.getElementById('filterMatpel').value = '';
-        filterCards();
-    }
-
-    // Initialize tooltips for progress bars
-    document.addEventListener('DOMContentLoaded', function() {
-        const progressBars = document.querySelectorAll('.progress-bar');
-        progressBars.forEach(bar => {
-            new bootstrap.Tooltip(bar);
-        });
-    });
-</script>
-
 <style>
-    .border-end {
-        border-right: 1px solid #dee2e6 !important;
-    }
-
-    .progress-bar {
-        transition: width 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-        transition: transform 0.2s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .card-header {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    }
-
-    .fw-medium {
-        font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-        .border-end {
-            border-right: none !important;
-            border-bottom: 1px solid #dee2e6 !important;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .border-end:last-child {
-            border-bottom: none !important;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .col-3 {
-            font-size: 0.85rem;
-        }
-
-        .card-header {
-            padding: 0.75rem;
-        }
-
-        .card-header h6 {
-            font-size: 0.9rem;
-        }
-    }
+.pg-wrap{padding:2rem 2rem 3rem;max-width:1280px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.pg-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0051ba;margin-bottom:4px}
+.pg-title{font-size:1.5rem;font-weight:800;color:#0f172a;margin-bottom:4px}
+.pg-sub{font-size:.84rem;color:#6b7280;margin:0}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:600;color:#475569;background:#fff;border:1px solid #e2e8f0;padding:8px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:all .15s}
+.btn-back:hover{background:#f8fafc;color:#0051ba;border-color:#c7d7f5}
+.alert-pg{display:flex;align-items:center;font-size:.875rem;padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;position:relative}
+.alert-pg--success{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.alert-pg--danger{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.alert-pg-close{position:absolute;right:.75rem;background:none;border:none;font-size:1.1rem;cursor:pointer;color:inherit;opacity:.5;line-height:1;padding:0}
+.alert-pg-close:hover{opacity:1}
+/* Legend */
+.legend-bar{font-size:.8rem;color:#6b7280;background:#fff;border:1px solid rgba(15,23,42,.07);border-radius:8px;padding:.6rem 1rem;margin-bottom:1rem}
+/* Badges */
+.pg-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;background:rgba(0,81,186,.07);color:#0051ba}
+.pg-badge--gray{background:rgba(107,114,128,.08);color:#4b5563}
+.pg-badge--yellow{background:rgba(245,158,11,.1);color:#92400e}
+.pg-badge--green{background:rgba(22,163,74,.08);color:#166534}
+.pg-badge--dark{background:rgba(15,23,42,.07);color:#374151}
+/* Filter */
+.filter-card{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:0 2px 8px rgba(15,23,42,.03)}
+.filter-label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9ca3af;margin-bottom:5px}
+.f-input{display:block;width:100%;padding:.55rem .875rem;font-size:.875rem;color:#0f172a;background:#fff;border:1px solid #d1d5db;border-radius:8px;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+.f-input:focus{border-color:#0051ba;box-shadow:0 0 0 3px rgba(0,81,186,.1)}
+.btn-reset{display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;color:#475569;background:#fff;border:1px solid #e2e8f0;padding:9px;border-radius:8px;cursor:pointer;transition:all .15s;height:37px}
+.btn-reset:hover{background:#f0f5ff;color:#0051ba;border-color:#c7d7f5}
+/* Hasil Card */
+.h-card{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 4px 16px rgba(15,23,42,.04);display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .2s,transform .2s}
+.h-card:hover{box-shadow:0 8px 28px rgba(15,23,42,.09);transform:translateY(-2px)}
+.h-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;padding:1rem 1.25rem;background:#f8fafc;border-bottom:1px solid #f1f5f9}
+.h-school-info{display:flex;align-items:flex-start;gap:.625rem}
+.h-school-icon{width:34px;height:34px;border-radius:8px;background:rgba(0,81,186,.08);color:#0051ba;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;margin-top:1px}
+.h-school-name{font-size:.88rem;font-weight:700;color:#0f172a;margin-bottom:2px}
+.h-school-kelas{font-size:.75rem;color:#6b7280;margin:0}
+.h-card-body{padding:1rem 1.25rem;flex:1}
+.h-title{font-size:.95rem;font-weight:700;color:#0f172a;margin-bottom:4px;line-height:1.3}
+.h-desc{font-size:.8rem;color:#6b7280;margin:.5rem 0 .75rem;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.h-time-row{display:flex;gap:.75rem;margin-bottom:.625rem;flex-wrap:wrap}
+.h-time-item{flex:1;min-width:140px}
+.h-time-label{display:block;font-size:.72rem;color:#9ca3af;margin-bottom:2px}
+.h-time-val{font-size:.8rem;font-weight:600;color:#374151}
+.h-akses{display:flex;align-items:center;gap:.5rem;background:#f0f5ff;border:1px solid rgba(0,81,186,.12);border-radius:7px;padding:.4rem .75rem;margin-bottom:.75rem}
+.h-akses-val{font-size:.84rem;font-weight:700;color:#0051ba;letter-spacing:.5px}
+.h-stats{display:flex;gap:.5rem;margin:.75rem 0}
+.h-stat{flex:1;display:flex;flex-direction:column;align-items:center;padding:.4rem;background:#f8fafc;border-radius:8px;border:1px solid #f1f5f9}
+.h-stat-val{font-size:1rem;font-weight:800;color:#0f172a;line-height:1}
+.h-stat-green{color:#16a34a!important}
+.h-stat-yellow{color:#d97706!important}
+.h-stat-label{font-size:.68rem;color:#9ca3af;margin-top:2px}
+.h-progress{margin-bottom:.75rem}
+.h-progress-label{font-size:.72rem;color:#9ca3af;margin-top:4px;margin-bottom:0}
+.h-time-stats{background:#f8fafc;border-radius:8px;border:1px solid #f1f5f9;padding:.625rem .875rem;margin-bottom:.75rem}
+.h-time-stats-title{font-size:.72rem;font-weight:700;color:#6b7280;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px}
+.h-guru{font-size:.78rem;color:#9ca3af;margin:0}
+.h-card-footer{padding:.875rem 1.25rem;border-top:1px solid #f1f5f9}
+.tbl-card{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;overflow:hidden}
+.tbl-empty{text-align:center;padding:3rem 1rem}
+.tbl-empty i{font-size:2.5rem;display:block;margin-bottom:.75rem;color:#cbd5e1}
+.tbl-empty p{color:#9ca3af;margin-bottom:.5rem;font-size:.9rem}
+.btn-submit{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:#fff;background:#0051ba;border:1px solid #0051ba;padding:8px 22px;border-radius:8px;cursor:pointer;transition:all .15s}
+.btn-submit:hover{background:#003d8f}
+.btn-cancel{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:#475569;background:#fff;border:1px solid #e2e8f0;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .15s}
+.w-100{width:100%}
+@media(max-width:768px){.pg-wrap{padding:1.25rem 1rem 2rem}.pg-title{font-size:1.25rem}.pg-header{flex-direction:column}.h-time-item{min-width:100px}}
 </style>
+
+<script>
+document.getElementById('searchUjian') && document.getElementById('searchUjian').addEventListener('keyup', filterCards);
+document.getElementById('filterSekolah') && document.getElementById('filterSekolah').addEventListener('change', filterCards);
+document.getElementById('filterKelas') && document.getElementById('filterKelas').addEventListener('change', filterCards);
+document.getElementById('filterStatus') && document.getElementById('filterStatus').addEventListener('change', filterCards);
+document.getElementById('filterMatpel') && document.getElementById('filterMatpel').addEventListener('change', filterCards);
+
+function filterCards() {
+    const searchText   = (document.getElementById('searchUjian') ? document.getElementById('searchUjian').value : '').toLowerCase();
+    const sekolahFilter = document.getElementById('filterSekolah') ? document.getElementById('filterSekolah').value : '';
+    const kelasFilter   = document.getElementById('filterKelas') ? document.getElementById('filterKelas').value : '';
+    const statusFilter  = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : '';
+    const matpelFilter  = document.getElementById('filterMatpel') ? document.getElementById('filterMatpel').value : '';
+
+    document.querySelectorAll('.h-card-wrap').forEach(card => {
+        const title   = card.querySelector('.h-title') ? card.querySelector('.h-title').textContent.toLowerCase() : '';
+        const sekolah = card.getAttribute('data-sekolah') || '';
+        const kelas   = card.getAttribute('data-kelas') || '';
+        const status  = card.getAttribute('data-status') || '';
+        const matpel  = card.getAttribute('data-matpel') || '';
+
+        const match = (!searchText || title.includes(searchText)) &&
+                      (!sekolahFilter || sekolah === sekolahFilter) &&
+                      (!kelasFilter || kelas === kelasFilter) &&
+                      (!statusFilter || status === statusFilter) &&
+                      (!matpelFilter || matpel === matpelFilter);
+
+        card.style.display = match ? '' : 'none';
+    });
+}
+
+function resetFilter() {
+    ['searchUjian','filterSekolah','filterKelas','filterStatus','filterMatpel'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    filterCards();
+}
+</script>
 
 <?= $this->endSection() ?>
