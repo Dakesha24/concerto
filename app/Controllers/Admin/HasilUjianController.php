@@ -93,7 +93,7 @@ class HasilUjianController extends Controller
                     ->orderBy('waktu_menjawab', 'DESC')->limit(1)->get()->getRowArray();
 
                 $theta_akhir   = $lastResult ? (float) $lastResult['theta_saat_ini'] : 0;
-                $skor_akhir    = $this->hitungKemampuanKognitif($theta_akhir);
+                $skor_akhir    = $this->hitungKemampuanKognitif($theta_akhir, (int)$ujian['ujian_id']);
 
                 $siswa['theta_akhir']         = $theta_akhir;
                 $siswa['skor']                = $skor_akhir;
@@ -134,7 +134,7 @@ class HasilUjianController extends Controller
 
         $lastResult             = end($detailDenganDurasi);
         $theta_akhir            = $lastResult ? (float) $lastResult['theta_saat_ini'] : 0;
-        $skor_akhir             = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir             = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif    = $this->getKlasifikasiKognitif($skor_akhir);
 
         $hasil = $this->appendDurasiFormat($hasil, $totalSoal);
@@ -166,7 +166,7 @@ class HasilUjianController extends Controller
 
         $lastResult          = end($detailDenganDurasi);
         $theta_akhir         = $lastResult ? (float) $lastResult['theta_saat_ini'] : 0;
-        $skor_akhir          = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir          = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
 
         $hasil = $this->appendDurasiFormat($hasil, $totalSoal);
@@ -204,7 +204,7 @@ class HasilUjianController extends Controller
 
         $lastResult          = end($detailDenganDurasi);
         $theta_akhir         = $lastResult ? (float) $lastResult['theta_saat_ini'] : 0;
-        $skor_akhir          = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir          = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
 
         $hasil = $this->appendDurasiFormat($hasil, $totalSoal);
@@ -329,23 +329,68 @@ class HasilUjianController extends Controller
         return $hasil;
     }
 
-    private function hitungKemampuanKognitif($theta)
+    private function hitungKemampuanKognitif(float $theta_fi, int $ujianId): float
     {
-        return max(0, round(50 + (16.67 * (float) $theta), 2));
+        ['theta_bar' => $theta_bar, 'sd' => $sd] = $this->getStatistikTheta($ujianId);
+
+        if ($sd == 0) {
+            return 50.0;
+        }
+
+        return round(50 + 10 * (($theta_fi + $theta_bar) / $sd), 2);
     }
 
-    private function getKlasifikasiKognitif($skor)
+    private function getStatistikTheta(int $ujianId): array
     {
-        if ($skor < 25) {
-            return ['kategori' => 'Sangat Rendah', 'class' => 'text-danger', 'bg_class' => 'bg-danger'];
-        } elseif ($skor < 42) {
-            return ['kategori' => 'Rendah', 'class' => 'text-orange', 'bg_class' => 'bg-orange'];
-        } elseif ($skor < 58) {
-            return ['kategori' => 'Cukup', 'class' => 'text-warning', 'bg_class' => 'bg-warning'];
-        } elseif ($skor < 75) {
-            return ['kategori' => 'Baik', 'class' => 'text-info', 'bg_class' => 'bg-info'];
+        static $cache = [];
+
+        if (isset($cache[$ujianId])) {
+            return $cache[$ujianId];
+        }
+
+        $rows = $this->db->query(
+            "SELECT hu.theta_saat_ini
+             FROM hasil_ujian hu
+             INNER JOIN peserta_ujian pu ON pu.peserta_ujian_id = hu.peserta_ujian_id
+             INNER JOIN jadwal_ujian ju  ON ju.jadwal_id = pu.jadwal_id
+             WHERE ju.ujian_id = ?
+               AND pu.status   = 'selesai'
+               AND hu.waktu_menjawab = (
+                   SELECT MAX(hu2.waktu_menjawab)
+                   FROM hasil_ujian hu2
+                   WHERE hu2.peserta_ujian_id = hu.peserta_ujian_id
+               )",
+            [$ujianId]
+        )->getResultArray();
+
+        $thetas = array_map('floatval', array_column($rows, 'theta_saat_ini'));
+        $n      = count($thetas);
+
+        if ($n < 2) {
+            $cache[$ujianId] = ['theta_bar' => $n === 1 ? $thetas[0] : 0.0, 'sd' => 0.0];
+            return $cache[$ujianId];
+        }
+
+        $theta_bar = array_sum($thetas) / $n;
+        $variance  = array_sum(array_map(fn($t) => ($t - $theta_bar) ** 2, $thetas)) / $n;
+        $sd        = sqrt($variance);
+
+        $cache[$ujianId] = ['theta_bar' => $theta_bar, 'sd' => $sd];
+        return $cache[$ujianId];
+    }
+
+    private function getKlasifikasiKognitif(float $skor): array
+    {
+        if ($skor < 35) {
+            return ['kategori' => 'Sangat Rendah', 'class' => 'text-danger',  'bg_class' => 'bg-danger'];
+        } elseif ($skor < 45) {
+            return ['kategori' => 'Rendah',        'class' => 'text-orange',  'bg_class' => 'bg-orange'];
+        } elseif ($skor < 55) {
+            return ['kategori' => 'Sedang',         'class' => 'text-warning', 'bg_class' => 'bg-warning'];
+        } elseif ($skor < 65) {
+            return ['kategori' => 'Tinggi',         'class' => 'text-info',    'bg_class' => 'bg-info'];
         } else {
-            return ['kategori' => 'Sangat Baik', 'class' => 'text-success', 'bg_class' => 'bg-success'];
+            return ['kategori' => 'Sangat Tinggi',  'class' => 'text-success', 'bg_class' => 'bg-success'];
         }
     }
 

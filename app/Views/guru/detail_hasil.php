@@ -139,12 +139,12 @@
       </div>
     </div>
 
-    <!-- BARU: Kartu Kemampuan Kognitif -->
+    <!-- BARU: Kartu Keterampilan Berpikir Kritis -->
     <div class="col-md-4">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-transparent">
           <h5 class="card-title mb-0">
-            <i class="bi bi-brain"></i> Kemampuan Kognitif
+            <i class="bi bi-brain"></i> Keterampilan Berpikir Kritis
           </h5>
         </div>
         <div class="card-body text-center">
@@ -173,19 +173,19 @@
     </div>
   </div>
 
-  <!-- Modal Rumus Kemampuan Kognitif -->
+  <!-- Modal Rumus Keterampilan Berpikir Kritis -->
   <div class="modal fade" id="rumusKognitifModal" tabindex="-1" aria-labelledby="rumusKognitifModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rumusKognitifModalLabel">Rumus Perhitungan Kemampuan Kognitif</h5>
+          <h5 class="modal-title" id="rumusKognitifModalLabel">Rumus Perhitungan Keterampilan Berpikir Kritis</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-4">
             <h6>Rumus Dasar:</h6>
             <div class="bg-light p-3 rounded">
-              <code>Skor Kognitif = (B - (S/(P-1))) / N × 100</code>
+              <code>T-Score = 50 + 10 × ((θ_fi + θ̄_f) / SD)</code>
             </div>
           </div>
 
@@ -200,20 +200,20 @@
           </div>
 
           <div class="mb-4">
-            <h6>Klasifikasi Kemampuan:</h6>
+            <h6>Klasifikasi Keterampilan Berpikir Kritis:</h6>
             <ul>
-              <li><span class="badge bg-success">Sangat Tinggi</span>: 80% - 100%</li>
-              <li><span class="badge bg-info">Tinggi</span>: 60% - 80%</li>
-              <li><span class="badge bg-warning">Rata-rata (Sedang)</span>: 40% - 60%</li>
-              <li><span class="badge bg-orange text-white">Rendah</span>: 20% - 40%</li>
-              <li><span class="badge bg-danger">Sangat Rendah</span>: 0% - 20%</li>
+              <li><span class="badge bg-success">Sangat Tinggi</span>: T-Score ≥ 65</li>
+              <li><span class="badge bg-info">Tinggi</span>: T-Score 55 – 64</li>
+              <li><span class="badge bg-warning">Sedang</span>: T-Score 45 – 54</li>
+              <li><span class="badge bg-orange text-white">Rendah</span>: T-Score 35 – 44</li>
+              <li><span class="badge bg-danger">Sangat Rendah</span>: T-Score &lt; 35</li>
             </ul>
           </div>
 
           <div class="bg-info-subtle p-3 rounded">
             <small>
               <strong>Catatan:</strong> Rumus ini menggunakan koreksi untuk faktor menebak,
-              sehingga memberikan estimasi yang lebih akurat tentang kemampuan kognitif siswa dalam memahami materi ujian.
+              sehingga memberikan estimasi yang lebih akurat tentang keterampilan berpikir kritis siswa dalam memahami materi ujian.
             </small>
           </div>
         </div>
@@ -224,7 +224,7 @@
     </div>
   </div>
 
-  <!-- BARU: Card Interpretasi Kemampuan Kognitif untuk Guru -->
+  <!-- BARU: Card Interpretasi Keterampilan Berpikir Kritis untuk Guru -->
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-transparent border-0">
       <h5 class="mb-0">
@@ -235,28 +235,28 @@
       <div class="row">
         <div class="col-md-8">
           <p class="mb-2">
-            <strong>Analisis Kemampuan Kognitif:</strong>
+            <strong>Analisis Keterampilan Berpikir Kritis:</strong>
           </p>
           <p class="text-muted mb-3">
-            Siswa <strong><?= esc($hasil['nama_lengkap']) ?></strong> memiliki kemampuan kognitif
+            Siswa <strong><?= esc($hasil['nama_lengkap']) ?></strong> memiliki keterampilan berpikir kritis tingkat
             <strong class="<?= $klasifikasiKognitif['class'] ?>"><?= $klasifikasiKognitif['kategori'] ?></strong>
             dengan skor <strong><?= $kemampuanKognitif['skor'] ?>%</strong> dalam mata pelajaran
             <strong><?= esc($hasil['nama_jenis']) ?></strong>.
           </p>
 
-          <?php if ($kemampuanKognitif['skor'] > 80): ?>
+          <?php if ($kemampuanKognitif['skor'] >= 65): ?>
             <div class="alert alert-success">
               <i class="bi bi-trophy"></i>
-              <strong>Rekomendasi:</strong> Siswa menunjukkan pemahaman yang sangat baik.
+              <strong>Rekomendasi:</strong> Siswa menunjukkan keterampilan berpikir kritis yang sangat baik.
               Berikan tantangan lebih lanjut dengan soal-soal aplikatif dan analisis tingkat tinggi.
             </div>
-          <?php elseif ($kemampuanKognitif['skor'] > 60): ?>
+          <?php elseif ($kemampuanKognitif['skor'] >= 55): ?>
             <div class="alert alert-info">
               <i class="bi bi-star"></i>
-              <strong>Rekomendasi:</strong> Kemampuan siswa sudah baik.
+              <strong>Rekomendasi:</strong> Keterampilan berpikir kritis siswa sudah baik.
               Fokuskan pada pendalaman materi dan latihan soal dengan variasi yang lebih kompleks.
             </div>
-          <?php elseif ($kemampuanKognitif['skor'] > 40): ?>
+          <?php elseif ($kemampuanKognitif['skor'] >= 45): ?>
             <div class="alert alert-warning">
               <i class="bi bi-lightbulb"></i>
               <strong>Rekomendasi:</strong> Perlu perbaikan dalam pemahaman konsep dasar.
@@ -283,7 +283,7 @@
               </div>
             </div>
             <div class="mb-2">
-              <small class="text-muted">Skor Kognitif:</small>
+              <small class="text-muted">T-Score Kritis:</small>
               <div class="progress mb-1" style="height: 20px;">
                 <div class="progress-bar <?= $klasifikasiKognitif['bg_class'] ?>" role="progressbar"
                   style="width: <?= $kemampuanKognitif['skor'] ?>%">

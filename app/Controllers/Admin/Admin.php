@@ -1496,21 +1496,35 @@ class Admin extends Controller
         ];
 
         if (!$this->validate($rules)) {
-            // Mengirimkan error ke session flashdata
             return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
         }
 
+        $useWaktu   = $this->request->getPost('use_waktu')   ? 1 : 0;
+        $useSeMin   = $this->request->getPost('use_se_min')  ? 1 : 0;
+        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
+        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->back()->withInput()->with('error', 'Minimal satu stopping rule harus diaktifkan.');
+        }
+
         $data = [
-            'jenis_ujian_id' => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian' => $this->request->getPost('nama_ujian'),
-            'kode_ujian' => $this->request->getPost('kode_ujian'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'se_awal' => $this->request->getPost('se_awal'),
-            'se_minimum' => $this->request->getPost('se_minimum'),
-            'delta_se_minimum' => $this->request->getPost('delta_se_minimum'),
-            'durasi' => $this->request->getPost('durasi'),
-            'kelas_id' => $this->request->getPost('kelas_id') ?: null,
-            'created_by' => $userId
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id') ?: null,
+            'created_by'            => $userId,
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => $this->request->getPost('tampilkan_pembahasan') ? 1 : 0,
         ];
 
         try {
@@ -1549,19 +1563,33 @@ class Admin extends Controller
         }
 
         // 3. Admin tidak memerlukan validasi akses
-        // Semua blok validasi ->hasAccess() dihilangkan
+
+        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
+        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
+        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
+        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->back()->withInput()->with('errors', ['stopping_rule' => 'Minimal satu stopping rule harus diaktifkan.']);
+        }
 
         // 4. Siapkan data baru untuk diupdate
         $data = [
-            'jenis_ujian_id' => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian' => $this->request->getPost('nama_ujian'),
-            'kode_ujian' => $this->request->getPost('kode_ujian'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'se_awal' => $this->request->getPost('se_awal'),
-            'se_minimum' => $this->request->getPost('se_minimum'),
-            'delta_se_minimum' => $this->request->getPost('delta_se_minimum'),
-            'durasi' => $this->request->getPost('durasi'),
-            'kelas_id' => $this->request->getPost('kelas_id') ?: null
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id') ?: null,
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => $this->request->getPost('tampilkan_pembahasan') ? 1 : 0,
         ];
 
         // 5. Lakukan update dan berikan notifikasi
@@ -1697,7 +1725,7 @@ class Admin extends Controller
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             $newName = $fotoFile->getRandomName();
-            $uploadPath = FCPATH . 'uploads/soal';
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
@@ -1792,7 +1820,7 @@ class Admin extends Controller
         ];
 
         // 4. Proses upload/hapus foto
-        $uploadPath = FCPATH . 'uploads/soal';
+        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             if (!empty($soal['foto'])) {
@@ -1837,7 +1865,7 @@ class Admin extends Controller
             $imagesToCleanup = array_diff($oldUsedImages, $newUsedImages);
 
             foreach ($imagesToCleanup as $filename) {
-                $imagePath = FCPATH . 'uploads/editor-images/' . $filename;
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/' . $filename;
                 if (file_exists($imagePath)) {
                     // Cek apakah gambar digunakan oleh soal lain
                     $otherUsage = $this->checkImageUsageInOtherQuestions($filename, $id);
@@ -1886,7 +1914,7 @@ class Admin extends Controller
                         ->countAllResults() > 0;
 
                     if (!$isImageUsedElsewhere) {
-                        $fotoPath = FCPATH . 'uploads/soal/' . $filename;
+                        $fotoPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $filename;
                         if (file_exists($fotoPath)) {
                             unlink($fotoPath);
                         }
@@ -1906,7 +1934,7 @@ class Admin extends Controller
                     $isUsedElsewhere = $this->checkImageUsageInOtherQuestions($filename, $id);
 
                     if (!$isUsedElsewhere) {
-                        $imagePath = FCPATH . 'uploads/editor-images/' . $filename;
+                        $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/' . $filename;
                         if (file_exists($imagePath)) {
                             unlink($imagePath);
                         }
@@ -2171,49 +2199,69 @@ class Admin extends Controller
         return $hasilDenganDurasi;
     }
 
-    private function hitungKemampuanKognitif($theta)
+    private function hitungKemampuanKognitif(float $theta_fi, int $ujianId): float
     {
-        // Rumus skor akhir siswa (x) = 50 + (16.67 * tetha)
-        $skor_akhir = 50 + (16.67 * (float)$theta);
+        ['theta_bar' => $theta_bar, 'sd' => $sd] = $this->getStatistikTheta($ujianId);
 
-        $skor_akhir = max(0, $skor_akhir);
+        if ($sd == 0) {
+            return 50.0;
+        }
 
-        // Mengembalikan skor yang sudah dibulatkan
-        return round($skor_akhir, 2);
+        return round(50 + 10 * (($theta_fi + $theta_bar) / $sd), 2);
     }
 
-    private function getKlasifikasiKognitif($skor)
+    private function getStatistikTheta(int $ujianId): array
     {
-        if ($skor < 25) {
-            return [
-                'kategori' => 'Sangat Rendah',
-                'class' => 'text-danger',
-                'bg_class' => 'bg-danger'
-            ];
-        } elseif ($skor >= 25 && $skor < 42) {
-            return [
-                'kategori' => 'Rendah',
-                'class' => 'text-orange',
-                'bg_class' => 'bg-orange'
-            ];
-        } elseif ($skor >= 42 && $skor < 58) {
-            return [
-                'kategori' => 'Cukup',
-                'class' => 'text-warning',
-                'bg_class' => 'bg-warning'
-            ];
-        } elseif ($skor >= 58 && $skor < 75) {
-            return [
-                'kategori' => 'Baik',
-                'class' => 'text-info',
-                'bg_class' => 'bg-info'
-            ];
-        } else { // $skor >= 75
-            return [
-                'kategori' => 'Sangat Baik',
-                'class' => 'text-success',
-                'bg_class' => 'bg-success'
-            ];
+        static $cache = [];
+
+        if (isset($cache[$ujianId])) {
+            return $cache[$ujianId];
+        }
+
+        $db   = \Config\Database::connect();
+        $rows = $db->query(
+            "SELECT hu.theta_saat_ini
+             FROM hasil_ujian hu
+             INNER JOIN peserta_ujian pu ON pu.peserta_ujian_id = hu.peserta_ujian_id
+             INNER JOIN jadwal_ujian ju  ON ju.jadwal_id = pu.jadwal_id
+             WHERE ju.ujian_id = ?
+               AND pu.status   = 'selesai'
+               AND hu.waktu_menjawab = (
+                   SELECT MAX(hu2.waktu_menjawab)
+                   FROM hasil_ujian hu2
+                   WHERE hu2.peserta_ujian_id = hu.peserta_ujian_id
+               )",
+            [$ujianId]
+        )->getResultArray();
+
+        $thetas = array_map('floatval', array_column($rows, 'theta_saat_ini'));
+        $n      = count($thetas);
+
+        if ($n < 2) {
+            $cache[$ujianId] = ['theta_bar' => $n === 1 ? $thetas[0] : 0.0, 'sd' => 0.0];
+            return $cache[$ujianId];
+        }
+
+        $theta_bar = array_sum($thetas) / $n;
+        $variance  = array_sum(array_map(fn($t) => ($t - $theta_bar) ** 2, $thetas)) / $n;
+        $sd        = sqrt($variance);
+
+        $cache[$ujianId] = ['theta_bar' => $theta_bar, 'sd' => $sd];
+        return $cache[$ujianId];
+    }
+
+    private function getKlasifikasiKognitif(float $skor): array
+    {
+        if ($skor < 35) {
+            return ['kategori' => 'Sangat Rendah', 'class' => 'text-danger',  'bg_class' => 'bg-danger'];
+        } elseif ($skor < 45) {
+            return ['kategori' => 'Rendah',        'class' => 'text-orange',  'bg_class' => 'bg-orange'];
+        } elseif ($skor < 55) {
+            return ['kategori' => 'Sedang',         'class' => 'text-warning', 'bg_class' => 'bg-warning'];
+        } elseif ($skor < 65) {
+            return ['kategori' => 'Tinggi',         'class' => 'text-info',    'bg_class' => 'bg-info'];
+        } else {
+            return ['kategori' => 'Sangat Tinggi',  'class' => 'text-success', 'bg_class' => 'bg-success'];
         }
     }
 
@@ -2371,7 +2419,7 @@ class Admin extends Controller
 
                 // 2. Hitung skor akhir berdasarkan theta
                 $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-                $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+                $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, (int)$ujian['ujian_id']);
                 $siswa['theta_akhir'] = $theta_akhir;
                 $siswa['skor'] = $skor_akhir;
                 $siswa['nilai'] = min(100, max(0, round($skor_akhir)));
@@ -2459,9 +2507,9 @@ class Admin extends Controller
         $jawabanBenar = array_reduce($detailJawabanDenganDurasi, fn($c, $i) => $c + ($i['is_correct'] ? 1 : 0), 0);
 
         // Perhitungan Skor Kognitif
-        $lastResult = end($detailJawabanDenganDurasi);
+        $lastResult  = end($detailJawabanDenganDurasi);
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
 
         $kemampuanKognitif = [
@@ -2541,9 +2589,9 @@ class Admin extends Controller
         $totalSoal = count($detailJawabanDenganDurasi);
         $jawabanBenar = array_reduce($detailJawabanDenganDurasi, fn($c, $i) => $c + ($i['is_correct'] ? 1 : 0), 0);
 
-        $lastResult = end($detailJawabanDenganDurasi);
+        $lastResult  = end($detailJawabanDenganDurasi);
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
         $kemampuanKognitif = ['skor' => $skor_akhir, 'total_benar' => $jawabanBenar, 'total_salah' => $totalSoal - $jawabanBenar, 'rata_rata_pilihan' => 0];
 
@@ -2617,9 +2665,9 @@ class Admin extends Controller
         $jawabanBenar = array_reduce($detailJawabanDenganDurasi, fn($c, $i) => $c + ($i['is_correct'] ? 1 : 0), 0);
 
         // Perhitungan Skor Baru
-        $lastResult = end($detailJawabanDenganDurasi);
+        $lastResult  = end($detailJawabanDenganDurasi);
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['ujian_id']);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
         $kemampuanKognitif = [
             'skor' => $skor_akhir,
@@ -3133,7 +3181,7 @@ class Admin extends Controller
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             $newName = $fotoFile->getRandomName();
-            // $uploadPath = FCPATH . 'uploads/soal';
+            // $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
             $uploadPath = 'https://cd-cat.lab-fisika.id/uploads/soal';
 
 
@@ -3197,7 +3245,7 @@ class Admin extends Controller
         ];
 
         // Handle foto upload/delete (sama seperti di guru)
-        $uploadPath = FCPATH . 'uploads/soal';
+        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
         $fotoFile = $this->request->getFile('foto');
 
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
@@ -3684,14 +3732,15 @@ class Admin extends Controller
 
             // Generate nama file dengan timestamp untuk uniqueness
             $fileName = 'editor_' . time() . '_' . uniqid() . '.' . $ext;
-            $uploadPath = FCPATH . 'uploads/editor-images';
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images';
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
 
             if ($uploadedFile->move($uploadPath, $fileName)) {
-                $imageUrl = base_url('uploads/editor-images/' . $fileName);
+                $scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                $imageUrl = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/uploads/editor-images/' . $fileName;
 
                 // TRACKING: Simpan info upload sementara di session untuk cleanup later
                 $tempImages = session()->get('temp_uploaded_images') ?? [];
@@ -3805,7 +3854,7 @@ class Admin extends Controller
             return redirect()->to('/')->with('error', 'Unauthorized');
         }
 
-        $uploadPath = FCPATH . 'uploads/editor-images/';
+        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/';
         $deletedCount = 0;
 
         if (is_dir($uploadPath)) {

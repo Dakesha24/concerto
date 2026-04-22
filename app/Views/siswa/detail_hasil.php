@@ -83,7 +83,7 @@
       <div class="card border-0 shadow-sm">
         <div class="card-body text-center">
           <h3 class="<?= $klasifikasiKognitif['class'] ?> mb-1"><?= $kemampuanKognitif['skor'] ?></h3>
-          <small class="text-muted d-block">Skor Kognitif</small>
+          <small class="text-muted d-block">T-Score Kritis</small>
           <span class="badge <?= $klasifikasiKognitif['bg_class'] ?> text-white mt-2">
             <?= $klasifikasiKognitif['kategori'] ?>
           </span>
@@ -96,7 +96,7 @@
   <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-transparent border-0">
       <h5 class="mb-0">
-        <i class="bi bi-brain"></i> Analisis Kemampuan Kognitif
+        <i class="bi bi-brain"></i> Analisis Keterampilan Berpikir Kritis
       </h5>
     </div>
     <div class="card-body">

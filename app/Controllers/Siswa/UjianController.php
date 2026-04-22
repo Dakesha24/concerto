@@ -203,13 +203,13 @@ class UjianController extends Controller
             }
         }
 
-        // Cek durasi
+        // Cek durasi (hanya jika stopping rule waktu aktif)
         $durasi = explode(':', $ujianInfo['durasi']);
         $durasiDetik = ($durasi[0] * 3600) + ($durasi[1] * 60) + (isset($durasi[2]) ? $durasi[2] : 0);
         $waktuSelesai = strtotime($waktuMulai) + $durasiDetik;
-        $sisaWaktu = $waktuSelesai - time();
+        $sisaWaktu = $ujianInfo['use_waktu'] ? ($waktuSelesai - time()) : PHP_INT_MAX;
 
-        if ($sisaWaktu <= 0) {
+        if ($ujianInfo['use_waktu'] && $sisaWaktu <= 0) {
             $this->pesertaUjianModel->update($peserta['peserta_ujian_id'], [
                 'status' => 'selesai',
                 'waktu_selesai' => date('Y-m-d H:i:s')
@@ -231,20 +231,19 @@ class UjianController extends Controller
 
     public function simpanJawaban()
     {
-        $soalId = $this->request->getPost('soal_id');
+        $soalId  = $this->request->getPost('soal_id');
         $jawaban = $this->request->getPost('jawaban');
 
         if (!$soalId || !$jawaban) {
-            session()->setFlashdata('error', 'Data jawaban tidak lengkap');
-            return redirect()->back();
+            return $this->response->setJSON(['success' => false, 'message' => 'Data jawaban tidak lengkap']);
         }
 
-        $soal = $this->soalUjianModel->find($soalId);
+        $soal              = $this->soalUjianModel->find($soalId);
         $current_jadwal_id = session()->get('current_jadwal_id');
-        $catParams = session()->get('cat_params');
+        $catParams         = session()->get('cat_params');
 
         if (!$soal || !$current_jadwal_id || !$catParams) {
-            return redirect()->to(base_url('siswa/ujian'));
+            return $this->response->setJSON(['success' => false, 'message' => 'Sesi tidak valid']);
         }
 
         $ujianInfo = $this->jadwalUjianModel
@@ -254,11 +253,11 @@ class UjianController extends Controller
             ->first();
 
         $isBenar = ($jawaban === $soal['jawaban_benar']);
-        $theta = $catParams['theta'];
-        $b = $soal['tingkat_kesulitan'];
+        $theta   = $catParams['theta'];
+        $b       = $soal['tingkat_kesulitan'];
 
         // Perhitungan probabilitas IRT 1PL
-        $e = 2.71828;
+        $e  = 2.71828;
         $Pi = pow($e, ($theta - $b)) / (1 + pow($e, ($theta - $b)));
         $Qi = 1 - $Pi;
         $Ii = $Pi * $Qi;
@@ -266,24 +265,24 @@ class UjianController extends Controller
         $totalIi = 0;
         foreach ($catParams['answered_questions'] as $answeredSoalId) {
             $answeredSoal = $this->soalUjianModel->find($answeredSoalId);
-            $bi = $answeredSoal['tingkat_kesulitan'];
-            $Pi_ans = pow($e, ($theta - $bi)) / (1 + pow($e, ($theta - $bi)));
-            $totalIi += ($Pi_ans * (1 - $Pi_ans));
+            $bi           = $answeredSoal['tingkat_kesulitan'];
+            $Pi_ans       = pow($e, ($theta - $bi)) / (1 + pow($e, ($theta - $bi)));
+            $totalIi     += ($Pi_ans * (1 - $Pi_ans));
         }
         $totalIi += $Ii;
 
-        $SE_old = $catParams['SE'];
-        $SE_new = $totalIi > 0 ? 1 / sqrt($totalIi) : 1;
+        $SE_old   = $catParams['SE'];
+        $SE_new   = $totalIi > 0 ? 1 / sqrt($totalIi) : 1;
         $delta_SE = $SE_old - $SE_new;
 
         // Pemilihan soal berikutnya (Step-up/Step-down)
         if ($isBenar) {
-            $theta = $b;
+            $theta        = $b;
             $nextQuestion = $this->soalUjianModel
                 ->where('ujian_id', $soal['ujian_id'])
                 ->where('tingkat_kesulitan >', $b);
         } else {
-            $theta = $b;
+            $theta        = $b;
             $nextQuestion = $this->soalUjianModel
                 ->where('ujian_id', $soal['ujian_id'])
                 ->where('tingkat_kesulitan <', $b);
@@ -297,12 +296,12 @@ class UjianController extends Controller
 
         // Update CAT params
         $catParams['theta'] = $theta;
-        $catParams['SE'] = $SE_new;
+        $catParams['SE']    = $SE_new;
         if (!in_array($soalId, $catParams['answered_questions'])) {
             $catParams['answered_questions'][] = $soalId;
         }
         $catParams['current_question'] = $nextQuestion;
-        $catParams['total_questions'] = count($catParams['answered_questions']);
+        $catParams['total_questions']  = count($catParams['answered_questions']);
         session()->set('cat_params', $catParams);
 
         // Simpan ke database
@@ -310,32 +309,47 @@ class UjianController extends Controller
         $peserta = $this->pesertaUjianModel->where(['jadwal_id' => $current_jadwal_id, 'siswa_id' => $siswaId])->first();
 
         $this->hasilUjianModel->insert([
-            'peserta_ujian_id' => $peserta['peserta_ujian_id'],
-            'soal_id' => $soalId,
-            'jawaban_siswa' => $jawaban,
-            'is_correct' => $isBenar,
-            'theta_saat_ini' => $theta,
-            'pi_saat_ini' => $Pi,
-            'qi_saat_ini' => $Qi,
-            'ii_saat_ini' => $Ii,
-            'se_saat_ini' => $SE_new,
-            'delta_se_saat_ini' => $delta_SE
+            'peserta_ujian_id'  => $peserta['peserta_ujian_id'],
+            'soal_id'           => $soalId,
+            'jawaban_siswa'     => $jawaban,
+            'is_correct'        => $isBenar,
+            'theta_saat_ini'    => $theta,
+            'pi_saat_ini'       => $Pi,
+            'qi_saat_ini'       => $Qi,
+            'ii_saat_ini'       => $Ii,
+            'se_saat_ini'       => $SE_new,
+            'delta_se_saat_ini' => $delta_SE,
         ]);
 
-        // Cek kondisi berhenti CAT
-        $shouldStop = ($SE_new < (float)$ujianInfo['se_minimum']) 
-                    || (abs($delta_SE) < (float)$ujianInfo['delta_se_minimum']) 
-                    || !$nextQuestion;
+        // Cek stopping rule secara dinamis berdasarkan toggle yang aktif
+        $shouldStop = !$nextQuestion;
+        if (!$shouldStop && $ujianInfo['use_se_min'] && $SE_new < (float)$ujianInfo['se_minimum']) {
+            $shouldStop = true;
+        }
+        if (!$shouldStop && $ujianInfo['use_delta_se'] && abs($delta_SE) < (float)$ujianInfo['delta_se_minimum']) {
+            $shouldStop = true;
+        }
+        if (!$shouldStop && $ujianInfo['use_max_soal'] && count($catParams['answered_questions']) >= (int)$ujianInfo['maksimal_soal_tampil']) {
+            $shouldStop = true;
+        }
 
         if ($shouldStop) {
             $this->pesertaUjianModel->update($peserta['peserta_ujian_id'], [
-                'status' => 'selesai',
-                'waktu_selesai' => date('Y-m-d H:i:s')
+                'status'        => 'selesai',
+                'waktu_selesai' => date('Y-m-d H:i:s'),
             ]);
-            return redirect()->to(base_url("siswa/ujian/selesai/{$current_jadwal_id}"));
         }
 
-        return redirect()->back();
+        return $this->response->setJSON([
+            'success'              => true,
+            'is_correct'           => $isBenar,
+            'jawaban_benar'        => $soal['jawaban_benar'],
+            'tampilkan_pembahasan' => (bool)$ujianInfo['tampilkan_pembahasan'],
+            'pembahasan'           => $ujianInfo['tampilkan_pembahasan'] ? ($soal['pembahasan'] ?? '') : '',
+            'should_stop'          => $shouldStop,
+            'selesai_url'          => base_url("siswa/ujian/selesai/{$current_jadwal_id}"),
+            'next_url'             => base_url("siswa/ujian/soal/{$current_jadwal_id}"),
+        ]);
     }
 
     public function selesai($jadwalId)

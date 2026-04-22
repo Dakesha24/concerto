@@ -73,9 +73,39 @@ class BankSoalController extends Controller
         return view('guru/bank_soal/kategori', ['kategori' => $kategori, 'jenisUjianList' => $jenisUjianList]);
     }
 
+    public function jenisUjian($kategori, $jenisUjianId)
+    {
+        $ujianList = $this->db->table('bank_ujian')
+            ->select('bank_ujian.*, users.username as creator_name')
+            ->join('users', 'users.user_id = bank_ujian.created_by')
+            ->where('bank_ujian.kategori', $kategori)
+            ->where('bank_ujian.jenis_ujian_id', $jenisUjianId)
+            ->orderBy('bank_ujian.created_at', 'DESC')
+            ->get()->getResultArray();
+
+        $jenisUjian = $this->jenisUjianModel->find($jenisUjianId);
+
+        return view('guru/bank_soal/jenis_ujian', [
+            'kategori' => $kategori,
+            'jenisUjian' => $jenisUjian,
+            'ujianList' => $ujianList,
+        ]);
+    }
+
     public function ujian($kategori, $jenisUjianId, $bankUjianId)
     {
-        $bankUjian = $this->db->table('bank_ujian')->where('bank_ujian_id', $bankUjianId)->get()->getRowArray();
+        $bankUjian = $this->db->table('bank_ujian')
+            ->select('bank_ujian.*, jenis_ujian.nama_jenis, users.username as creator_name')
+            ->join('jenis_ujian', 'jenis_ujian.jenis_ujian_id = bank_ujian.jenis_ujian_id')
+            ->join('users', 'users.user_id = bank_ujian.created_by')
+            ->where('bank_ujian.bank_ujian_id', $bankUjianId)
+            ->get()
+            ->getRowArray();
+
+        if (!$bankUjian) {
+            return redirect()->to('guru/bank-soal')->with('error', 'Bank ujian tidak ditemukan');
+        }
+
         $soalList = $this->soalUjianModel->where('bank_ujian_id', $bankUjianId)->findAll();
 
         return view('guru/bank_soal/ujian', [

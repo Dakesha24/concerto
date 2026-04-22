@@ -85,6 +85,7 @@
     }
 
     .navbar-toggler-concerto {
+        display: none;
         border: 1.5px solid rgba(255, 255, 255, 0.35);
         padding: 5px 10px;
         border-radius: 7px;
@@ -108,6 +109,10 @@
     }
 
     @media (max-width: 991px) {
+        .navbar-toggler-concerto {
+            display: block;
+        }
+
         .navbar-nav-concerto {
             flex-direction: column;
             align-items: stretch;

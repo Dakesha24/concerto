@@ -15,9 +15,6 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- tiny MCE -->
-    <script src="https://cdn.tiny.cloud/1/8qmtg0msjjyjo95gyqyzxsvhpf40ztljiqeyxuxxc8hgts8y/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.js"></script>
     <style>
@@ -42,7 +39,7 @@
             height: var(--navbar-height);
             padding: 0.5rem 1.5rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1030;
+            z-index: 3000;
             position: fixed;
             top: 0;
             left: 0;
@@ -104,7 +101,7 @@
             border-radius: 1rem;
             padding: 0.5rem;
             margin-top: 0.5rem !important;
-            z-index: 1050;
+            z-index: 3001;
         }
 
         .profile-dropdown .dropdown-item,
@@ -130,7 +127,7 @@
             top: var(--navbar-height);
             bottom: 0;
             left: 0;
-            z-index: 1025;
+            z-index: 2500;
             transition: transform 0.3s ease;
         }
 
@@ -213,7 +210,7 @@
                 right: 0;
                 bottom: 0;
                 background: rgba(0, 0, 0, 0.5);
-                z-index: 1020;
+                z-index: 2400;
                 display: none;
             }
 

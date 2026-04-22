@@ -80,12 +80,13 @@ class HasilUjianController extends Controller
             ->where('pu.jadwal_id', $jadwalId)
             ->get()->getResultArray();
 
+        $ujianId = (int)$ujian['ujian_id'];
         foreach ($hasilSiswa as &$siswa) {
             if ($siswa['status'] === 'selesai') {
-                $lastResult = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $siswa['peserta_ujian_id'])->orderBy('waktu_menjawab', 'DESC')->first();
+                $lastResult  = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $siswa['peserta_ujian_id'])->orderBy('waktu_menjawab', 'DESC')->first();
                 $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-                $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
-                $siswa['skor'] = $skor_akhir;
+                $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, $ujianId);
+                $siswa['skor']                = $skor_akhir;
                 $siswa['klasifikasi_kognitif'] = $this->getKlasifikasiKognitif($skor_akhir);
             }
         }
@@ -115,9 +116,9 @@ class HasilUjianController extends Controller
             ->findAll();
 
         $detailJawabanDenganDurasi = $this->hitungDurasiPerSoal($detailJawaban, $hasil['waktu_mulai']);
-        $lastResult = end($detailJawaban);
+        $lastResult  = end($detailJawaban);
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, (int)$hasil['id_ujian']);
 
         $data = [
             'hasil' => $hasil,

@@ -74,7 +74,7 @@ class SoalController extends Controller
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             $newName    = $fotoFile->getRandomName();
-            $uploadPath = FCPATH . 'uploads/soal';
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
@@ -148,7 +148,7 @@ class SoalController extends Controller
             'pembahasan'        => $this->request->getPost('pembahasan'),
         ];
 
-        $uploadPath = FCPATH . 'uploads/soal';
+        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
         $fotoFile   = $this->request->getFile('foto');
 
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
@@ -184,7 +184,7 @@ class SoalController extends Controller
             $tempImages    = session()->get('temp_uploaded_images') ?? [];
 
             foreach (array_diff($oldUsedImages, $newUsedImages) as $filename) {
-                $imagePath = FCPATH . 'uploads/editor-images/' . $filename;
+                $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/' . $filename;
                 if (file_exists($imagePath) && !$this->checkImageUsageInOtherQuestions($filename, $id)) {
                     unlink($imagePath);
                 }
@@ -216,7 +216,7 @@ class SoalController extends Controller
                 if (!empty($soal['foto'])) {
                     $isUsedElsewhere = $this->soalUjianModel->where('foto', $soal['foto'])->where('soal_id !=', $id)->countAllResults() > 0;
                     if (!$isUsedElsewhere) {
-                        $fotoPath = FCPATH . 'uploads/soal/' . $soal['foto'];
+                        $fotoPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto'];
                         if (file_exists($fotoPath)) {
                             unlink($fotoPath);
                         }
@@ -229,7 +229,7 @@ class SoalController extends Controller
 
                 foreach ($this->extractImageFilenames($allHtml) as $filename) {
                     if (!$this->checkImageUsageInOtherQuestions($filename, $id)) {
-                        $imagePath = FCPATH . 'uploads/editor-images/' . $filename;
+                        $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/' . $filename;
                         if (file_exists($imagePath)) {
                             unlink($imagePath);
                         }

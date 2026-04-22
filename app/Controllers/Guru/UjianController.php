@@ -45,19 +45,33 @@ class UjianController extends Controller
     public function tambah()
     {
         $userId = session()->get('user_id');
-        $guru = $this->guruModel->where('user_id', $userId)->first();
+
+        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
+        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
+        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
+        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->to('guru/ujian')->with('error', 'Minimal satu stopping rule harus diaktifkan.');
+        }
 
         $data = [
-            'jenis_ujian_id' => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian' => $this->request->getPost('nama_ujian'),
-            'kode_ujian' => $this->request->getPost('kode_ujian'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'se_awal' => $this->request->getPost('se_awal'),
-            'se_minimum' => $this->request->getPost('se_minimum'),
-            'delta_se_minimum' => $this->request->getPost('delta_se_minimum'),
-            'durasi' => $this->request->getPost('durasi'),
-            'kelas_id' => $this->request->getPost('kelas_id'),
-            'created_by' => $userId
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id'),
+            'created_by'            => $userId,
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => $this->request->getPost('tampilkan_pembahasan') ? 1 : 0,
         ];
 
         try {
@@ -70,16 +84,31 @@ class UjianController extends Controller
 
     public function edit($id)
     {
+        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
+        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
+        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
+        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->to('guru/ujian')->with('error', 'Minimal satu stopping rule harus diaktifkan.');
+        }
+
         $data = [
-            'jenis_ujian_id' => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian' => $this->request->getPost('nama_ujian'),
-            'kode_ujian' => $this->request->getPost('kode_ujian'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'se_awal' => $this->request->getPost('se_awal'),
-            'se_minimum' => $this->request->getPost('se_minimum'),
-            'delta_se_minimum' => $this->request->getPost('delta_se_minimum'),
-            'durasi' => $this->request->getPost('durasi'),
-            'kelas_id' => $this->request->getPost('kelas_id')
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id'),
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => $this->request->getPost('tampilkan_pembahasan') ? 1 : 0,
         ];
 
         try {

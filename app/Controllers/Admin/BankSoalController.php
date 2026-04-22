@@ -329,7 +329,7 @@ class BankSoalController extends Controller
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             $newName    = $fotoFile->getRandomName();
-            $uploadPath = FCPATH . 'uploads/soal';
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
@@ -385,7 +385,7 @@ class BankSoalController extends Controller
             'pembahasan'        => $this->request->getPost('pembahasan'),
         ];
 
-        $uploadPath = FCPATH . 'uploads/soal';
+        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal';
         $fotoFile   = $this->request->getFile('foto');
 
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
@@ -429,7 +429,7 @@ class BankSoalController extends Controller
         }
 
         if (!empty($soal['foto'])) {
-            $fotoPath = FCPATH . 'uploads/soal/' . $soal['foto'];
+            $fotoPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto'];
             if (file_exists($fotoPath)) {
                 unlink($fotoPath);
             }

@@ -135,24 +135,25 @@ class HasilController extends Controller
             return $carry + ($item['is_correct'] ? 1 : 0);
         }, 0);
 
-        $lastResult = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $pesertaUjianId)->orderBy('waktu_menjawab', 'DESC')->first();
+        $lastResult  = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $pesertaUjianId)->orderBy('waktu_menjawab', 'DESC')->first();
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $ujianId     = (int)$hasil['id_ujian'];
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, $ujianId);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
 
         $data = [
-            'hasil' => $hasil,
-            'detailJawaban' => $detailJawabanDenganDurasi,
-            'totalSoal' => $totalSoal,
-            'jawabanBenar' => $jawabanBenar,
-            'skor' => $skor_akhir,
+            'hasil'              => $hasil,
+            'detailJawaban'      => $detailJawabanDenganDurasi,
+            'totalSoal'          => $totalSoal,
+            'jawabanBenar'       => $jawabanBenar,
+            'skor'               => $skor_akhir,
             'klasifikasiKognitif' => $klasifikasiKognitif,
-            'kemampuanKognitif' => [
-                'skor' => $skor_akhir,
-                'total_benar' => $jawabanBenar,
-                'total_salah' => $totalSoal - $jawabanBenar,
-                'rata_rata_pilihan' => 0
-            ]
+            'kemampuanKognitif'  => [
+                'skor'              => $skor_akhir,
+                'total_benar'       => $jawabanBenar,
+                'total_salah'       => $totalSoal - $jawabanBenar,
+                'rata_rata_pilihan' => 0,
+            ],
         ];
 
         return view('siswa/detail_hasil', $data);
@@ -197,19 +198,20 @@ class HasilController extends Controller
             return $carry + ($item['is_correct'] ? 1 : 0);
         }, 0);
 
-        $lastResult = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $pesertaUjianId)->orderBy('waktu_menjawab', 'DESC')->first();
+        $lastResult  = $this->hasilUjianModel->select('theta_saat_ini')->where('peserta_ujian_id', $pesertaUjianId)->orderBy('waktu_menjawab', 'DESC')->first();
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
-        $skor_akhir = $this->hitungKemampuanKognitif($theta_akhir);
+        $ujianId     = (int)$hasil['id_ujian'];
+        $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, $ujianId);
 
         $data = [
-            'hasil' => $hasil,
-            'detailJawaban' => $detailJawabanDenganDurasi,
-            'totalSoal' => $totalSoal,
-            'jawabanBenar' => $jawabanBenar,
-            'siswa' => $siswa,
-            'skor' => $skor_akhir,
+            'hasil'              => $hasil,
+            'detailJawaban'      => $detailJawabanDenganDurasi,
+            'totalSoal'          => $totalSoal,
+            'jawabanBenar'       => $jawabanBenar,
+            'siswa'              => $siswa,
+            'skor'               => $skor_akhir,
             'klasifikasiKognitif' => $this->getKlasifikasiKognitif($skor_akhir),
-            'kemampuanKognitif' => ['skor' => $skor_akhir, 'total_benar' => $jawabanBenar, 'total_salah' => $totalSoal - $jawabanBenar, 'rata_rata_pilihan' => 0]
+            'kemampuanKognitif'  => ['skor' => $skor_akhir, 'total_benar' => $jawabanBenar, 'total_salah' => $totalSoal - $jawabanBenar, 'rata_rata_pilihan' => 0],
         ];
 
         return view('siswa/cetak_hasil_ujian', $data);

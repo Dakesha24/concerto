@@ -38,14 +38,15 @@ class UploadController extends Controller
             }
 
             $fileName   = 'editor_' . time() . '_' . uniqid() . '.' . $ext;
-            $uploadPath = FCPATH . 'uploads/editor-images';
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images';
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
 
             if ($uploadedFile->move($uploadPath, $fileName)) {
-                $imageUrl   = base_url('uploads/editor-images/' . $fileName);
+                $scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                $imageUrl = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/uploads/editor-images/' . $fileName;
                 $tempImages = session()->get('temp_uploaded_images') ?? [];
                 $tempImages[] = [
                     'filename'    => $fileName,
@@ -74,7 +75,7 @@ class UploadController extends Controller
             return redirect()->to('/')->with('error', 'Unauthorized');
         }
 
-        $uploadPath   = FCPATH . 'uploads/editor-images/';
+        $uploadPath   = $_SERVER['DOCUMENT_ROOT'] . '/uploads/editor-images/';
         $deletedCount = 0;
 
         if (is_dir($uploadPath)) {

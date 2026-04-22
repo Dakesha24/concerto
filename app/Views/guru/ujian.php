@@ -206,15 +206,54 @@
               <input type="number" name="se_awal" class="form-control" step="0.0001" value="1.0000" required>
               <div class="form-text">Standard Error awal</div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">SE Minimum</label>
-              <input type="number" name="se_minimum" class="form-control" step="0.0001" value="0.2500" required>
-              <div class="form-text">Batas SE minimum</div>
+            <!-- Stopping Rule -->
+            <div class="col-12">
+              <div class="guru-sr-section">
+                <div class="guru-sr-title"><i class="bi bi-stop-circle me-1"></i>Stopping Rule <span class="text-danger">*</span> <small class="text-muted fw-normal">(minimal 1 aktif)</small></div>
+                <div class="mt-2 d-flex flex-column gap-2">
+                  <label class="guru-sr-item">
+                    <input type="checkbox" name="use_waktu" value="1" checked>
+                    <span>Waktu Ujian (batas durasi)</span>
+                  </label>
+                  <div>
+                    <label class="guru-sr-item">
+                      <input type="checkbox" name="use_se_min" value="1" class="guru-sr-check" data-target="tambah_se_min" checked>
+                      <span>Akurasi Estimasi — SE &lt; SE Minimum</span>
+                    </label>
+                    <div id="tambah_se_min" class="ps-4 mt-1">
+                      <input type="number" name="se_minimum" class="form-control form-control-sm" style="max-width:180px" step="0.0001" value="0.2500" placeholder="SE Minimum">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="guru-sr-item">
+                      <input type="checkbox" name="use_delta_se" value="1" class="guru-sr-check" data-target="tambah_delta_se" checked>
+                      <span>Perbedaan SEM — |ΔSEM| &lt; Delta SE Minimum</span>
+                    </label>
+                    <div id="tambah_delta_se" class="ps-4 mt-1">
+                      <input type="number" name="delta_se_minimum" class="form-control form-control-sm" style="max-width:180px" step="0.0001" value="0.0100" placeholder="Delta SE Minimum">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="guru-sr-item">
+                      <input type="checkbox" name="use_max_soal" value="1" class="guru-sr-check" data-target="tambah_max_soal">
+                      <span>Jumlah Soal — maksimal soal dijawab</span>
+                    </label>
+                    <div id="tambah_max_soal" class="ps-4 mt-1" style="display:none">
+                      <input type="number" name="maksimal_soal_tampil" class="form-control form-control-sm" style="max-width:180px" value="30" min="1" placeholder="Jumlah soal maksimal">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Delta SE Minimum</label>
-              <input type="number" name="delta_se_minimum" class="form-control" step="0.0001" value="0.0100" required>
-              <div class="form-text">Perubahan SE minimum</div>
+            <!-- Feedback Siswa -->
+            <div class="col-12">
+              <div class="guru-sr-section">
+                <div class="guru-sr-title"><i class="bi bi-chat-text me-1"></i>Feedback Siswa</div>
+                <label class="guru-sr-item mt-2">
+                  <input type="checkbox" name="tampilkan_pembahasan" value="1">
+                  <span>Tampilkan jawaban benar &amp; pembahasan setiap soal dijawab</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -292,13 +331,54 @@
                 <label class="form-label fw-semibold">SE Awal</label>
                 <input type="number" name="se_awal" class="form-control" step="0.0001" value="<?= esc($u['se_awal']) ?>" required>
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">SE Minimum</label>
-                <input type="number" name="se_minimum" class="form-control" step="0.0001" value="<?= esc($u['se_minimum']) ?>" required>
+              <!-- Stopping Rule -->
+              <div class="col-12">
+                <div class="guru-sr-section">
+                  <div class="guru-sr-title"><i class="bi bi-stop-circle me-1"></i>Stopping Rule <span class="text-danger">*</span> <small class="text-muted fw-normal">(minimal 1 aktif)</small></div>
+                  <div class="mt-2 d-flex flex-column gap-2">
+                    <label class="guru-sr-item">
+                      <input type="checkbox" name="use_waktu" value="1" <?= !empty($u['use_waktu']) ? 'checked' : '' ?>>
+                      <span>Waktu Ujian (batas durasi)</span>
+                    </label>
+                    <div>
+                      <label class="guru-sr-item">
+                        <input type="checkbox" name="use_se_min" value="1" class="guru-sr-check" data-target="edit_se_min_<?= $u['id_ujian'] ?>" <?= !empty($u['use_se_min']) ? 'checked' : '' ?>>
+                        <span>Akurasi Estimasi — SE &lt; SE Minimum</span>
+                      </label>
+                      <div id="edit_se_min_<?= $u['id_ujian'] ?>" class="ps-4 mt-1" <?= empty($u['use_se_min']) ? 'style="display:none"' : '' ?>>
+                        <input type="number" name="se_minimum" class="form-control form-control-sm" style="max-width:180px" step="0.0001" value="<?= esc($u['se_minimum']) ?>" placeholder="SE Minimum">
+                      </div>
+                    </div>
+                    <div>
+                      <label class="guru-sr-item">
+                        <input type="checkbox" name="use_delta_se" value="1" class="guru-sr-check" data-target="edit_delta_se_<?= $u['id_ujian'] ?>" <?= !empty($u['use_delta_se']) ? 'checked' : '' ?>>
+                        <span>Perbedaan SEM — |ΔSEM| &lt; Delta SE Minimum</span>
+                      </label>
+                      <div id="edit_delta_se_<?= $u['id_ujian'] ?>" class="ps-4 mt-1" <?= empty($u['use_delta_se']) ? 'style="display:none"' : '' ?>>
+                        <input type="number" name="delta_se_minimum" class="form-control form-control-sm" style="max-width:180px" step="0.0001" value="<?= esc($u['delta_se_minimum']) ?>" placeholder="Delta SE Minimum">
+                      </div>
+                    </div>
+                    <div>
+                      <label class="guru-sr-item">
+                        <input type="checkbox" name="use_max_soal" value="1" class="guru-sr-check" data-target="edit_max_soal_<?= $u['id_ujian'] ?>" <?= !empty($u['use_max_soal']) ? 'checked' : '' ?>>
+                        <span>Jumlah Soal — maksimal soal dijawab</span>
+                      </label>
+                      <div id="edit_max_soal_<?= $u['id_ujian'] ?>" class="ps-4 mt-1" <?= empty($u['use_max_soal']) ? 'style="display:none"' : '' ?>>
+                        <input type="number" name="maksimal_soal_tampil" class="form-control form-control-sm" style="max-width:180px" value="<?= esc($u['maksimal_soal_tampil'] ?? 30) ?>" min="1" placeholder="Jumlah soal maksimal">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Delta SE Minimum</label>
-                <input type="number" name="delta_se_minimum" class="form-control" step="0.0001" value="<?= esc($u['delta_se_minimum']) ?>" required>
+              <!-- Feedback Siswa -->
+              <div class="col-12">
+                <div class="guru-sr-section">
+                  <div class="guru-sr-title"><i class="bi bi-chat-text me-1"></i>Feedback Siswa</div>
+                  <label class="guru-sr-item mt-2">
+                    <input type="checkbox" name="tampilkan_pembahasan" value="1" <?= !empty($u['tampilkan_pembahasan']) ? 'checked' : '' ?>>
+                    <span>Tampilkan jawaban benar &amp; pembahasan setiap soal dijawab</span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -362,6 +442,22 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .guru-sr-section { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: .875rem 1rem; }
+  .guru-sr-title { font-size: .84rem; font-weight: 700; color: #343a40; margin-bottom: 2px; }
+  .guru-sr-item { display: flex; align-items: flex-start; gap: .5rem; cursor: pointer; font-size: .875rem; }
+  .guru-sr-item input[type=checkbox] { margin-top: 2px; flex-shrink: 0; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.guru-sr-check').forEach(function(cb) {
+    const wrap = document.getElementById(cb.dataset.target);
+    if (!wrap) return;
+    cb.addEventListener('change', function() {
+      wrap.style.display = this.checked ? 'block' : 'none';
+    });
+  });
+});
+</script>
 
 <?= $this->endSection() ?>

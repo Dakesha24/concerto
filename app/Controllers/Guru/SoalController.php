@@ -63,7 +63,7 @@ class SoalController extends Controller
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
             $newName = $fotoFile->getRandomName();
-            $fotoFile->move(FCPATH . 'uploads/soal', $newName);
+            $fotoFile->move($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal', $newName);
             $data['foto'] = $newName;
         }
 
@@ -93,11 +93,11 @@ class SoalController extends Controller
 
         $fotoFile = $this->request->getFile('foto');
         if ($fotoFile->isValid() && !$fotoFile->hasMoved()) {
-            if (!empty($soal['foto']) && file_exists(FCPATH . 'uploads/soal/' . $soal['foto'])) {
-                unlink(FCPATH . 'uploads/soal/' . $soal['foto']);
+            if (!empty($soal['foto']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto'])) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto']);
             }
             $newName = $fotoFile->getRandomName();
-            $fotoFile->move(FCPATH . 'uploads/soal', $newName);
+            $fotoFile->move($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal', $newName);
             $data['foto'] = $newName;
         }
 
@@ -117,8 +117,8 @@ class SoalController extends Controller
         }
 
         $soal = $this->soalUjianModel->find($id);
-        if ($soal && !empty($soal['foto']) && file_exists(FCPATH . 'uploads/soal/' . $soal['foto'])) {
-            unlink(FCPATH . 'uploads/soal/' . $soal['foto']);
+        if ($soal && !empty($soal['foto']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto'])) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . '/uploads/soal/' . $soal['foto']);
         }
 
         $this->soalUjianModel->delete($id);
