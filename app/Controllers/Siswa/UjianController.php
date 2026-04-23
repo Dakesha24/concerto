@@ -294,6 +294,17 @@ class UjianController extends Controller
 
         $nextQuestion = $nextQuestion->orderBy('tingkat_kesulitan', $isBenar ? 'ASC' : 'DESC')->first();
 
+        // Fallback: jika tidak ada soal di arah step-up/down, ambil soal terdekat yang belum dijawab
+        if (!$nextQuestion) {
+            $fallback = $this->soalUjianModel
+                ->select('*, ABS(tingkat_kesulitan - ' . (float)$theta . ') as distance')
+                ->where('ujian_id', $soal['ujian_id']);
+            if (!empty($catParams['answered_questions'])) {
+                $fallback->whereNotIn('soal_id', $catParams['answered_questions']);
+            }
+            $nextQuestion = $fallback->orderBy('distance', 'ASC')->first();
+        }
+
         // Update CAT params
         $catParams['theta'] = $theta;
         $catParams['SE']    = $SE_new;
@@ -305,8 +316,15 @@ class UjianController extends Controller
         session()->set('cat_params', $catParams);
 
         // Simpan ke database
-        $siswaId = $this->siswaModel->where('user_id', session()->get('user_id'))->first()['siswa_id'];
+        $siswa = $this->siswaModel->where('user_id', session()->get('user_id'))->first();
+        if (!$siswa) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Data siswa tidak ditemukan']);
+        }
+        $siswaId = $siswa['siswa_id'];
         $peserta = $this->pesertaUjianModel->where(['jadwal_id' => $current_jadwal_id, 'siswa_id' => $siswaId])->first();
+        if (!$peserta) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Data peserta tidak ditemukan']);
+        }
 
         $this->hasilUjianModel->insert([
             'peserta_ujian_id'  => $peserta['peserta_ujian_id'],

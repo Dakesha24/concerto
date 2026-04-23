@@ -634,7 +634,7 @@
         deleteBtn.disabled = true;
 
         // Redirect ke controller
-        window.location.href = `<?= base_url('guru/hasil-ujian/hapus/') ?>${pesertaUjianId}`;
+        window.location.href = `<?= base_url('admin/hasil-ujian/hapus/') ?>${pesertaUjianId}`;
     }
 
     // TAMBAHAN: Function untuk execute reset
@@ -646,7 +646,7 @@
         resetBtn.disabled = true;
 
         // Redirect ke controller
-        window.location.href = `<?= base_url('guru/hasil-ujian/reset/') ?>${pesertaUjianId}`;
+        window.location.href = `<?= base_url('admin/hasil-ujian/reset/') ?>${pesertaUjianId}`;
     }
 </script>
 

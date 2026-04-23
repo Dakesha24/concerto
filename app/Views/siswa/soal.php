@@ -147,12 +147,13 @@
 
     if (!jawaban) return;
 
+    // Ambil FormData SEBELUM disable agar jawaban ikut terkirim
+    const formData = new FormData(form);
+
     // Nonaktifkan input & tombol
     form.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
     btnJawab.disabled     = true;
     btnJawab.textContent  = 'Memproses...';
-
-    const formData = new FormData(form);
 
     fetch('<?= base_url('siswa/ujian/simpan-jawaban') ?>', {
       method: 'POST',
@@ -162,7 +163,10 @@
     .then(res => res.json())
     .then(data => {
       if (!data.success) {
-        alert('Terjadi kesalahan. Silakan coba lagi.');
+        btnJawab.disabled    = false;
+        btnJawab.textContent = 'Jawab';
+        form.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = false);
+        alert('Terjadi kesalahan: ' + (data.message || 'Silakan coba lagi.'));
         return;
       }
 

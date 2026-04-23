@@ -262,6 +262,24 @@ class HasilUjianController extends Controller
         return redirect()->to(base_url('admin/hasil-ujian/siswa/' . $peserta['jadwal_id']));
     }
 
+    public function resetStatusSiswa($pesertaUjianId)
+    {
+        $peserta = $this->db->table('peserta_ujian')->where('peserta_ujian_id', $pesertaUjianId)->get()->getRowArray();
+        if (!$peserta) {
+            session()->setFlashdata('error', 'Data peserta tidak ditemukan');
+            return redirect()->back();
+        }
+
+        $this->db->table('peserta_ujian')->where('peserta_ujian_id', $pesertaUjianId)->update([
+            'status'        => 'belum_mulai',
+            'waktu_mulai'   => null,
+            'waktu_selesai' => null,
+        ]);
+
+        session()->setFlashdata('success', 'Status ujian siswa berhasil direset!');
+        return redirect()->to(base_url('admin/hasil-ujian/siswa/' . $peserta['jadwal_id']));
+    }
+
     // ===== Private Helpers =====
 
     private function getHasilLengkap($pesertaUjianId)

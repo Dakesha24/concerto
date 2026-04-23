@@ -120,6 +120,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
   $routes->get('hasil-ujian/siswa/(:num)', 'HasilUjianController::hasilUjianSiswa/$1');
   $routes->get('hasil-ujian/detail/(:num)', 'HasilUjianController::detailHasilSiswa/$1');
   $routes->get('hasil-ujian/hapus/(:num)', 'HasilUjianController::hapusHasilSiswa/$1');
+  $routes->get('hasil-ujian/reset/(:num)', 'HasilUjianController::resetStatusSiswa/$1');
   $routes->get('hasil-ujian/download-excel/(:num)', 'HasilUjianController::downloadExcelHTML/$1');
   $routes->get('hasil-ujian/download-pdf/(:num)', 'HasilUjianController::downloadPDFHTML/$1');
 
