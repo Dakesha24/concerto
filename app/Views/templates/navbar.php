@@ -6,14 +6,15 @@
     }
 
     .navbar-brand-concerto {
-        color: white !important;
-        font-weight: 800;
-        font-size: 1.3rem;
-        letter-spacing: 2.5px;
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 10px;
+    }
+
+    .navbar-brand-img {
+        height: 18px;
+        width: auto;
+        filter: brightness(0) invert(1);
     }
 
     .brand-icon {
@@ -138,8 +139,7 @@
 <nav class="navbar navbar-expand-lg navbar-concerto">
     <div class="container">
         <a class="navbar-brand-concerto" href="<?= base_url() ?>">
-            <div class="brand-icon">C</div>
-            CONCERTO
+            <img src="<?= base_url('assets/images/header-concerto.png') ?>" alt="CONCERTO" class="navbar-brand-img">
         </a>
 
         <button class="navbar-toggler-concerto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -7,16 +7,18 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
                 <p class="eyebrow">Platform Asesmen Adaptif Fisika</p>
-                <h1 class="h-title">Selamat Datang di<br><span>CONCERTO</span></h1>
+                <h1 class="h-title">Selamat Datang di<br><img src="<?= base_url('assets/images/header-concerto.png') ?>" alt="CONCERTO" class="h-title-img"></h1>
                 <p class="h-sub"><em>Computerized Online Network for Critical Thinking Evaluation through Responsive Testing Optimization</em></p>
-                <p class="h-body">Platform asesmen adaptif berbasis web menggunakan algoritma <em>Computerized Adaptive Testing</em> untuk mengukur kemampuan berpikir kritis peserta tes pada bidang Fisika secara akurat dan efisien.</p>
+                <p class="h-body">Platform asesmen adaptif digital berbasis web menggunakan algortma Computerized Adaptive Testing untuk mengukur Keterampilan berpikir kritis peserta tes pada bidang Fisika secara akurat disertai feedback real-time</p>
                 <div class="h-cta">
                     <a href="<?= base_url('login') ?>" class="btn-solid">Masuk</a>
                     <a href="<?= base_url('register') ?>" class="btn-ghost">Daftar Sekarang</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="<?= base_url('assets/images/heros.png') ?>" alt="CONCERTO" class="h-img">
+                <div class="h-img-wrap">
+                    <img src="<?= base_url('assets/images/heros.png') ?>" alt="CONCERTO" class="h-img">
+                </div>
             </div>
         </div>
     </div>
@@ -39,7 +41,7 @@
         <div class="row align-items-start g-5">
             <div class="col-lg-4">
                 <p class="sec-label">Keunggulan</p>
-                <h2 class="sec-title">Mengapa CONCERTO?</h2>
+                <h2 class="sec-title">Mengapa ADAPT-CT?</h2>
                 <p class="sec-desc">Dirancang dengan pendekatan ilmiah untuk asesmen yang akurat, efisien, dan bermakna.</p>
                 <a href="<?= base_url('about') ?>" class="sec-link">Pelajari lebih lanjut →</a>
             </div>
@@ -128,29 +130,24 @@
 }
 
 .h-title {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 800;
     color: #fff;
-    line-height: 1.15;
+    line-height: 1.2;
     margin-bottom: 14px;
     letter-spacing: -.5px;
 }
 
-.h-title span {
-    color: #ffda1a;
-    letter-spacing: 3px;
-    position: relative;
-}
-
-/* underline accent on CONCERTO */
-.h-title span::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, #ffda1a, transparent);
+.h-title-img {
+    display: block;
+    max-width: 40%;
+    height: auto;
+    margin: 18px 0 18px 0;
+    padding: 0;
+    filter:
+        drop-shadow(0 0 1px #fff)
+        drop-shadow(0 0 3px #fff)
+        drop-shadow(0 0 8px rgba(255,255,255,.6));
 }
 
 .h-sub {
@@ -200,10 +197,28 @@
 
 .btn-ghost:hover { color: #fff; border-color: #fff; }
 
+.h-img-wrap {
+    display: inline-block;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #ffda1a, #0051ba) border-box;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3);
+    transition: transform .35s ease, box-shadow .35s ease;
+    cursor: default;
+}
+
+.h-img-wrap:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 36px 64px rgba(0,0,0,.45);
+}
+
 .h-img {
-    max-width: 82%;
-    border-radius: 12px;
-    filter: drop-shadow(0 20px 50px rgba(0,0,0,.4));
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
 }
 
 /* ═══════════════ STRIP ═══════════════ */
@@ -326,9 +341,11 @@
 @media (max-width: 768px) {
     .hero { padding: 64px 0 56px; text-align: center; }
     .hero-body, .h-body { max-width: 100%; }
-    .h-title { font-size: 2.1rem; }
+    .h-title { font-size: 1.5rem; }
+    .h-title-img { margin-left: auto; margin-right: auto; }
     .h-cta { justify-content: center; }
-    .h-img { max-width: 78%; margin-bottom: 36px; }
+    .h-img-wrap { padding: 16px; }
+    .h-img { max-width: 100%; margin-bottom: 36px; }
     .strip-inner { gap: 20px; }
     .features { padding: 60px 0; }
 }
