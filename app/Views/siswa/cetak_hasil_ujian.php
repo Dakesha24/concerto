@@ -245,10 +245,10 @@
 
         <!-- BARU: Box Kemampuan Kognitif -->
         <div class="kognitif-box">
-            <h4 class="mb-3">Analisis Kemampuan Kognitif</h4>
+            <h4 class="mb-3">Analisis Keterampilan Berpikir Kritis</h4>
             <div class="row">
                 <div class="col-md-8">
-                    <div class="info-label">Skor Kemampuan Kognitif:</div>
+                    <div class="info-label">T-Score Kritis:</div>
                     <div class="info-value">
                         <span class="<?= esc($klasifikasiKognitif['class'], 'attr') ?>">
                             <?= $kemampuanKognitif['skor'] ?> - <?= $klasifikasiKognitif['kategori'] ?>
@@ -257,16 +257,16 @@
 
                     <div class="info-label mt-3">Interpretasi:</div>
                     <div class="info-value">
-                        <?php if ($kemampuanKognitif['skor'] >= 75): ?>
-                            Kemampuan kognitif sangat baik. Siswa menunjukkan pemahaman yang excellent dan mendalam terhadap materi.
-                        <?php elseif ($kemampuanKognitif['skor'] >= 58): ?>
-                            Kemampuan kognitif baik. Siswa memiliki pemahaman yang solid terhadap materi.
-                        <?php elseif ($kemampuanKognitif['skor'] >= 42): ?>
-                            Kemampuan kognitif cukup. Masih ada beberapa bagian materi yang perlu diperkuat pemahamannya.
-                        <?php elseif ($kemampuanKognitif['skor'] >= 25): ?>
-                            Kemampuan kognitif rendah. Disarankan untuk melakukan review ulang pada sebagian besar materi.
+                        <?php if ($kemampuanKognitif['skor'] >= 65): ?>
+                            Keterampilan berpikir kritis sangat baik. Siswa menunjukkan pemahaman yang excellent dan mendalam terhadap materi.
+                        <?php elseif ($kemampuanKognitif['skor'] >= 55): ?>
+                            Keterampilan berpikir kritis baik. Siswa memiliki pemahaman yang solid terhadap materi.
+                        <?php elseif ($kemampuanKognitif['skor'] >= 45): ?>
+                            Keterampilan berpikir kritis cukup. Masih ada beberapa bagian materi yang perlu diperkuat pemahamannya.
+                        <?php elseif ($kemampuanKognitif['skor'] >= 35): ?>
+                            Keterampilan berpikir kritis rendah. Disarankan untuk melakukan review ulang pada sebagian besar materi.
                         <?php else: ?>
-                            Kemampuan kognitif sangat rendah. Sangat disarankan untuk mempelajari kembali seluruh materi secara menyeluruh.
+                            Keterampilan berpikir kritis sangat rendah. Sangat disarankan untuk mempelajari kembali seluruh materi secara menyeluruh.
                         <?php endif; ?>
                     </div>
                 </div>
@@ -295,7 +295,7 @@
                             <th>Jawaban Benar</th>
                             <th>Jawaban Salah</th>
                             <th>Skor Ujian (Theta)</th>
-                            <th>Skor Kognitif</th>
+                            <th>T-Score Kritis</th>
                         </tr>
                     </thead>
                     <tbody>

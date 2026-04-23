@@ -412,11 +412,11 @@
         </div>
 
         <div class="cognitive-box">
-            <h3 class="cognitive-box-title">ANALISIS KEMAMPUAN KOGNITIF</h3>
+            <h3 class="cognitive-box-title">ANALISIS KETERAMPILAN BERPIKIR KRITIS</h3>
             <div class="cognitive-grid">
                 <div class="cognitive-item">
                     <span class="cognitive-value"><?= $kemampuanKognitif['skor'] ?></span>
-                    <span class="cognitive-label">SKOR KOGNITIF</span>
+                    <span class="cognitive-label">T-SCORE KRITIS</span>
                 </div>
                 <div class="cognitive-item">
                     <span class="cognitive-value"><?= $klasifikasiKognitif['kategori'] ?></span>
@@ -432,21 +432,21 @@
                 </div>
             </div>
             <div class="cognitive-formula">
-                <strong>Formula:</strong> Skor Akhir = 50 + (16.67 * &theta;)
+                <strong>Formula:</strong> T-Score = 50 + 10 &times; ((&theta;_fi + &theta;&#x0305;_f) / SD)
             </div>
         </div>
 
         <div class="recommendation-box">
             <h3><i class="bi bi-lightbulb"></i> Rekomendasi Pembelajaran</h3>
-            <?php if ($kemampuanKognitif['skor'] > 80): ?>
-                <p><strong>Strategi Pengajaran:</strong> Siswa menunjukkan pemahaman yang sangat baik.
+            <?php if ($kemampuanKognitif['skor'] >= 65): ?>
+                <p><strong>Strategi Pengajaran:</strong> Siswa menunjukkan keterampilan berpikir kritis yang sangat baik.
                     Berikan tantangan lebih lanjut dengan soal-soal aplikatif dan analisis tingkat tinggi.
-                    Fokuskan pada pengembangan kemampuan berpikir kritis dan problem solving.</p>
-            <?php elseif ($kemampuanKognitif['skor'] > 60): ?>
-                <p><strong>Strategi Pengajaran:</strong> Kemampuan siswa sudah baik.
+                    Fokuskan pada pengembangan problem solving kompleks.</p>
+            <?php elseif ($kemampuanKognitif['skor'] >= 55): ?>
+                <p><strong>Strategi Pengajaran:</strong> Keterampilan berpikir kritis siswa sudah baik.
                     Fokuskan pada pendalaman materi dan latihan soal dengan variasi yang lebih kompleks.
                     Berikan kesempatan untuk mengeksplorasi aplikasi konsep dalam konteks yang berbeda.</p>
-            <?php elseif ($kemampuanKognitif['skor'] > 40): ?>
+            <?php elseif ($kemampuanKognitif['skor'] >= 45): ?>
                 <p><strong>Strategi Pengajaran:</strong> Perlu perbaikan dalam pemahaman konsep dasar.
                     Berikan penjelasan ulang materi dengan pendekatan yang berbeda, gunakan lebih banyak contoh konkret,
                     dan sediakan latihan tambahan dengan tingkat kesulitan bertahap.</p>

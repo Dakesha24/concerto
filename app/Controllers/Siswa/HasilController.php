@@ -141,6 +141,11 @@ class HasilController extends Controller
         $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, $ujianId);
         $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
 
+        $durasiDetik = (int)($hasil['durasi_total_detik'] ?? 0);
+        $hasil['durasi_total_format'] = sprintf('%02d:%02d:%02d', floor($durasiDetik / 3600), floor(($durasiDetik % 3600) / 60), $durasiDetik % 60);
+        $rataDetik = $totalSoal > 0 ? (int)floor($durasiDetik / $totalSoal) : 0;
+        $rataRataWaktuFormat = sprintf('%d menit %d detik', floor($rataDetik / 60), $rataDetik % 60);
+
         $data = [
             'hasil'              => $hasil,
             'detailJawaban'      => $detailJawabanDenganDurasi,
@@ -148,6 +153,7 @@ class HasilController extends Controller
             'jawabanBenar'       => $jawabanBenar,
             'skor'               => $skor_akhir,
             'klasifikasiKognitif' => $klasifikasiKognitif,
+            'rataRataWaktuFormat' => $rataRataWaktuFormat,
             'kemampuanKognitif'  => [
                 'skor'              => $skor_akhir,
                 'total_benar'       => $jawabanBenar,

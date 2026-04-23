@@ -41,7 +41,7 @@
                 <a href="<?= base_url('guru/bank-soal/kategori/' . urlencode($kategori) . '/jenis-ujian/' . $bankUjian['jenis_ujian_id']) ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
-                <?php if ($canEdit): ?>
+                <?php if ($canAddSoal): ?>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSoal">
                         <i class="fas fa-plus me-2"></i>Tambah Soal
                     </button>
@@ -111,7 +111,7 @@
                             Belum ada soal yang dibuat untuk bank ujian
                             <strong><?= esc($bankUjian['nama_ujian']) ?></strong>
                         </p>
-                        <?php if ($canEdit): ?>
+                        <?php if ($canAddSoal): ?>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSoal">
                                 <i class="fas fa-plus me-2"></i>Tambah Soal Pertama
                             </button>
@@ -143,7 +143,7 @@
                                 <th width="10%" class="text-center">Kesulitan</th>
                                 <th width="8%" class="text-center">Foto</th>
                                 <th width="12%" class="text-center">Dibuat</th>
-                                <?php if ($canEdit): ?>
+                                <?php if ($showActionColumn): ?>
                                     <th width="22%" class="text-center">Aksi</th>
                                 <?php endif; ?>
                             </tr>
@@ -178,19 +178,27 @@
                                             <?= date('d/m/Y', strtotime($soal['created_at'])) ?>
                                         </small>
                                     </td>
-                                    <?php if ($canEdit): ?>
+                                    <?php
+                                    $canManageSoal = ((int) ($bankUjian['created_by'] ?? 0) === (int) ($currentUserId ?? 0))
+                                        || ((int) ($soal['created_by'] ?? 0) === (int) ($currentUserId ?? 0));
+                                    ?>
+                                    <?php if ($showActionColumn): ?>
                                         <td class="text-center">
-                                            <div class="btn-group btn-group-sm">
-                                                <button type="button" class="fw-bold btn btn-info" data-bs-toggle="modal" data-bs-target="#detailModal<?= $soal['soal_id'] ?>" title="Lihat Detail">
-                                                    <i class="fas fa-eye me-1"></i>Detail
-                                                </button>
-                                                <button type="button" class="fw-bold btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?= $soal['soal_id'] ?>" title="Edit">
-                                                    <i class="fas fa-edit me-1"></i>Edit
-                                                </button>
-                                                <button type="button" class="fw-bold btn btn-danger" onclick="hapusSoal(<?= $soal['soal_id'] ?>)" title="Hapus">
-                                                    <i class="fas fa-trash me-1"></i>Hapus
-                                                </button>
-                                            </div>
+                                            <?php if ($canManageSoal): ?>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="fw-bold btn btn-info" data-bs-toggle="modal" data-bs-target="#detailModal<?= $soal['soal_id'] ?>" title="Lihat Detail">
+                                                        <i class="fas fa-eye me-1"></i>Detail
+                                                    </button>
+                                                    <button type="button" class="fw-bold btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?= $soal['soal_id'] ?>" title="Edit">
+                                                        <i class="fas fa-edit me-1"></i>Edit
+                                                    </button>
+                                                    <button type="button" class="fw-bold btn btn-danger" onclick="hapusSoal(<?= $soal['soal_id'] ?>)" title="Hapus">
+                                                        <i class="fas fa-trash me-1"></i>Hapus
+                                                    </button>
+                                                </div>
+                                            <?php else: ?>
+                                                <span class="text-muted small">Tidak bisa diubah</span>
+                                            <?php endif; ?>
                                         </td>
                                     <?php endif; ?>
                                 </tr>
@@ -204,7 +212,7 @@
 </div>
 
 <!-- Modal Tambah Soal -->
-<?php if ($canEdit): ?>
+<?php if ($canAddSoal): ?>
     <div class="modal fade" id="modalTambahSoal" tabindex="-1" data-bs-focus="false">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -425,6 +433,11 @@
 
 <!-- Modal Edit Soal -->
 <?php foreach ($soalList as $soal): ?>
+    <?php
+    $canManageSoal = ((int) ($bankUjian['created_by'] ?? 0) === (int) ($currentUserId ?? 0))
+        || ((int) ($soal['created_by'] ?? 0) === (int) ($currentUserId ?? 0));
+    ?>
+    <?php if ($canManageSoal): ?>
     <div class="modal fade" id="editModal<?= $soal['soal_id'] ?>" tabindex="-1" data-bs-focus="false" data-bs-keyboard="false">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -590,6 +603,7 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
 <?php endforeach; ?>
 
 <!-- Include Summernote BS5 -->
@@ -1264,22 +1278,28 @@
 
         // Event listener untuk modal edit (gunakan loop untuk setiap soal)
         <?php foreach ($soalList as $s): ?>
-            $('#editModal<?= $s['soal_id'] ?>').on('shown.bs.modal', function() {
-                initializeSummernoteEdit(<?= $s['soal_id'] ?>);
-            });
+            <?php
+            $canManageCurrentSoal = ((int) ($bankUjian['created_by'] ?? 0) === (int) ($currentUserId ?? 0))
+                || ((int) ($s['created_by'] ?? 0) === (int) ($currentUserId ?? 0));
+            ?>
+            <?php if ($canManageCurrentSoal): ?>
+                $('#editModal<?= $s['soal_id'] ?>').on('shown.bs.modal', function() {
+                    initializeSummernoteEdit(<?= $s['soal_id'] ?>);
+                });
 
-            $('#editModal<?= $s['soal_id'] ?>').on('hidden.bs.modal', function() {
-                destroySummernoteInstances([
-                    '#pertanyaan_edit_<?= $s['soal_id'] ?>',
-                    '#pilihan_a_edit_<?= $s['soal_id'] ?>',
-                    '#pilihan_b_edit_<?= $s['soal_id'] ?>',
-                    '#pilihan_c_edit_<?= $s['soal_id'] ?>',
-                    '#pilihan_d_edit_<?= $s['soal_id'] ?>',
-                    '#pilihan_e_edit_<?= $s['soal_id'] ?>',
-                    '#pembahasan_edit_<?= $s['soal_id'] ?>'
-                ]);
-                cleanupModalBackdrop();
-            });
+                $('#editModal<?= $s['soal_id'] ?>').on('hidden.bs.modal', function() {
+                    destroySummernoteInstances([
+                        '#pertanyaan_edit_<?= $s['soal_id'] ?>',
+                        '#pilihan_a_edit_<?= $s['soal_id'] ?>',
+                        '#pilihan_b_edit_<?= $s['soal_id'] ?>',
+                        '#pilihan_c_edit_<?= $s['soal_id'] ?>',
+                        '#pilihan_d_edit_<?= $s['soal_id'] ?>',
+                        '#pilihan_e_edit_<?= $s['soal_id'] ?>',
+                        '#pembahasan_edit_<?= $s['soal_id'] ?>'
+                    ]);
+                    cleanupModalBackdrop();
+                });
+            <?php endif; ?>
         <?php endforeach; ?>
 
         // Handle cleanup saat modal ditutup tanpa save
@@ -1297,17 +1317,23 @@
 
         // Handle cleanup untuk modal edit
         <?php foreach ($soalList as $s): ?>
-            $('#editModal<?= $s['soal_id'] ?>').on('hidden.bs.modal', function() {
-                if (!$(this).data('form-submitted')) {
-                    $.ajax({
-                        url: '<?= base_url('guru/cleanup-temp-images') ?>',
-                        type: 'POST',
-                        silent: true,
-                        error: function() {}
-                    });
-                }
-                $(this).data('form-submitted', false);
-            });
+            <?php
+            $canManageCurrentSoal = ((int) ($bankUjian['created_by'] ?? 0) === (int) ($currentUserId ?? 0))
+                || ((int) ($s['created_by'] ?? 0) === (int) ($currentUserId ?? 0));
+            ?>
+            <?php if ($canManageCurrentSoal): ?>
+                $('#editModal<?= $s['soal_id'] ?>').on('hidden.bs.modal', function() {
+                    if (!$(this).data('form-submitted')) {
+                        $.ajax({
+                            url: '<?= base_url('guru/cleanup-temp-images') ?>',
+                            type: 'POST',
+                            silent: true,
+                            error: function() {}
+                        });
+                    }
+                    $(this).data('form-submitted', false);
+                });
+            <?php endif; ?>
         <?php endforeach; ?>
 
         // Set flag ketika form di-submit

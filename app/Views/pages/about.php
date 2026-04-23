@@ -52,7 +52,7 @@
                             <i class="bi bi-file-earmark-bar-graph-fill"></i>
                             <div>
                                 <strong>Laporan Mendalam</strong>
-                                <span>Profil kemampuan kognitif</span>
+                                <span>Profil keterampilan berpikir kritis</span>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="feature-card feature-card-accent">
                         <div class="feature-num">02</div>
                         <h3>Kognitif</h3>
-                        <p>Memberikan hasil analisis profil kemampuan kognitif dan kemampuan berpikir kritis peserta tes bidang Fisika.</p>
+                        <p>Memberikan hasil analisis profil keterampilan berpikir kritis peserta tes bidang Fisika.</p>
                     </div>
                 </div>
                 <div class="col-md-4">

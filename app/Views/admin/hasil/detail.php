@@ -153,7 +153,7 @@
     <!-- **BARU: Kemampuan Kognitif** -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Analisis Kemampuan Kognitif</h5>
+            <h5 class="card-title mb-0">Analisis Keterampilan Berpikir Kritis</h5>
             <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#cognitiveHelp" aria-expanded="false">
                 <i class="fas fa-info-circle me-1"></i>Info Perhitungan
             </button>
@@ -161,16 +161,15 @@
 
         <div class="collapse" id="cognitiveHelp">
             <div class="card-body bg-light">
-                <h6 class="fw-bold">Rumus Kemampuan Kognitif:</h6>
-                <p class="mb-2"><strong>Skor = (B - (S/(P-1))) / N × 100</strong></p>
+                <h6 class="fw-bold">Rumus T-Score Keterampilan Berpikir Kritis:</h6>
+                <p class="mb-2"><strong>T-Score = 50 + 10 × ((θ_fi + θ̄_f) / SD)</strong></p>
                 <ul class="small mb-0">
-                    <li><strong>B</strong>: Jumlah jawaban benar</li>
-                    <li><strong>S</strong>: Jumlah jawaban salah</li>
-                    <li><strong>P</strong>: Rata-rata jumlah pilihan jawaban per soal</li>
-                    <li><strong>N</strong>: Total jumlah soal</li>
+                    <li><strong>θ_fi</strong>: Theta akhir siswa</li>
+                    <li><strong>θ̄_f</strong>: Rata-rata theta seluruh peserta ujian yang sama</li>
+                    <li><strong>SD</strong>: Standar deviasi theta seluruh peserta</li>
                 </ul>
                 <p class="small mt-2 mb-0 text-muted">
-                    Formula ini menggunakan koreksi tebakan untuk mengurangi efek menebak secara acak pada penilaian kemampuan kognitif.
+                    Formula ini menggunakan pendekatan norm-referenced (acuan norma) untuk menilai keterampilan berpikir kritis siswa relatif terhadap kelompoknya.
                 </p>
             </div>
         </div>
@@ -182,7 +181,7 @@
                         <div class="col-md-6">
                             <table class="table table-borderless">
                                 <tr>
-                                    <td width="180">Skor Kemampuan Kognitif</td>
+                                    <td width="180">T-Score Kritis</td>
                                     <td width="20">:</td>
                                     <td><strong class="fs-4 text-primary"><?= $kemampuanKognitif['skor'] ?></strong></td>
                                 </tr>

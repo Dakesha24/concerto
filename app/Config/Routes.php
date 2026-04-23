@@ -186,6 +186,10 @@ $routes->group('guru', ['namespace' => 'App\Controllers\Guru'], function ($route
   $routes->get('bank-soal/kategori/(:segment)/jenis-ujian/(:num)', 'BankSoalController::jenisUjian/$1/$2');
   $routes->get('bank-soal/kategori/(:segment)/jenis-ujian/(:num)/ujian/(:num)', 'BankSoalController::ujian/$1/$2/$3');
   $routes->get('bank-soal/ujian/(:segment)/(:num)/(:num)', 'BankSoalController::ujian/$1/$2/$3');
+  $routes->post('bank-soal/tambah-soal', 'BankSoalController::tambahSoalBankUjian');
+  $routes->post('bank-soal/edit-soal/(:num)', 'BankSoalController::editSoalBankUjian/$1');
+  $routes->get('bank-soal/hapus-soal/(:num)', 'BankSoalController::hapusSoalBankUjian/$1');
+  $routes->get('bank-soal/api/jenis-ujian-kelas', 'BankSoalController::getJenisUjianByKategoriKelas');
 
   // Upload gambar editor (reuse Admin UploadController)
   $routes->post('upload-summernote-image', '\App\Controllers\Admin\UploadController::uploadSummernoteImage');

@@ -106,22 +106,22 @@
             <strong>Interpretasi Hasil:</strong>
           </p>
           <p class="text-muted mb-3">
-            Kemampuan kognitif Anda dalam mata pelajaran ini tergolong
+            Keterampilan berpikir kritis Anda dalam mata pelajaran ini tergolong
             <strong class="<?= $klasifikasiKognitif['class'] ?>"><?= $klasifikasiKognitif['kategori'] ?></strong>
             dengan skor <strong><?= $kemampuanKognitif['skor'] ?></strong>.
           </p>
 
-          <?php if ($kemampuanKognitif['skor'] > 80): ?>
+          <?php if ($kemampuanKognitif['skor'] >= 65): ?>
             <div class="alert alert-success">
               <i class="bi bi-trophy"></i>
-              <strong>Excellent!</strong> Anda menunjukkan pemahaman yang sangat baik terhadap materi ini.
+              <strong>Excellent!</strong> Anda menunjukkan keterampilan berpikir kritis yang sangat baik.
             </div>
-          <?php elseif ($kemampuanKognitif['skor'] > 60): ?>
+          <?php elseif ($kemampuanKognitif['skor'] >= 55): ?>
             <div class="alert alert-info">
               <i class="bi bi-star"></i>
-              <strong>Good Job!</strong> Anda memiliki pemahaman yang baik, terus tingkatkan!
+              <strong>Good Job!</strong> Keterampilan berpikir kritis Anda sudah baik, terus tingkatkan!
             </div>
-          <?php elseif ($kemampuanKognitif['skor'] > 40): ?>
+          <?php elseif ($kemampuanKognitif['skor'] >= 45): ?>
             <div class="alert alert-warning">
               <i class="bi bi-lightbulb"></i>
               <strong>Keep Learning!</strong> Masih ada ruang untuk peningkatan pemahaman.
@@ -158,7 +158,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="rumusModalLabel">Rumus Perhitungan Skor Kemampuan Kognitif</h5>
+          <h5 class="modal-title" id="rumusModalLabel">Rumus Perhitungan T-Score Keterampilan Berpikir Kritis</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -180,19 +180,19 @@
           </div>
 
           <div class="mb-4">
-            <h6>Klasifikasi Kemampuan:</h6>
+            <h6>Klasifikasi Keterampilan Berpikir Kritis:</h6>
             <ul class="list-unstyled">
-              <li><span class="badge bg-success" style="width: 120px;">Sangat Baik</span> : Skor &ge; 75</li>
-              <li><span class="badge bg-info" style="width: 120px;">Baik</span> : 58 &le; Skor &lt; 75</li>
-              <li><span class="badge bg-warning" style="width: 120px;">Cukup</span> : 42 &le; Skor &lt; 58</li>
-              <li><span class="badge bg-orange text-white" style="width: 120px;">Rendah</span> : 25 &le; Skor &lt; 42</li>
-              <li><span class="badge bg-danger" style="width: 120px;">Sangat Rendah</span> : Skor &lt; 25</li>
+              <li><span class="badge bg-success" style="width: 120px;">Sangat Tinggi</span> : T-Score &ge; 65</li>
+              <li><span class="badge bg-info" style="width: 120px;">Tinggi</span> : 55 &le; T-Score &lt; 65</li>
+              <li><span class="badge bg-warning" style="width: 120px;">Sedang</span> : 45 &le; T-Score &lt; 55</li>
+              <li><span class="badge bg-orange text-white" style="width: 120px;">Rendah</span> : 35 &le; T-Score &lt; 45</li>
+              <li><span class="badge bg-danger" style="width: 120px;">Sangat Rendah</span> : T-Score &lt; 35</li>
             </ul>
           </div>
 
           <div class="bg-info-subtle p-3 rounded">
             <small>
-              <strong>Catatan:</strong> Skor ini dihasilkan dari model Teori Respons Butir (Item Response Theory) yang secara adaptif mengukur kemampuan siswa. Semakin tinggi nilai theta, semakin tinggi pula estimasi kemampuan kognitif siswa.
+              <strong>Catatan:</strong> Skor ini dihasilkan dari model Teori Respons Butir (Item Response Theory) yang secara adaptif mengukur kemampuan siswa. Semakin tinggi nilai theta, semakin tinggi pula estimasi keterampilan berpikir kritis siswa.
             </small>
           </div>
         </div>

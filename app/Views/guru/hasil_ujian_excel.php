@@ -206,10 +206,10 @@
 
     <!-- BARU: Analisis Kemampuan Kognitif -->
     <div class="kognitif-box">
-        <h3>ANALISIS KEMAMPUAN KOGNITIF</h3>
+        <h3>ANALISIS KETERAMPILAN BERPIKIR KRITIS</h3>
         <table class="info-table">
             <tr>
-                <td class="label">Skor Kemampuan Kognitif</td>
+                <td class="label">T-Score Kritis</td>
                 <td><strong style="font-size: 14px; color: #6c757d;"><?= $kemampuanKognitif['skor'] ?></strong></td>
                 <td class="label">Total Benar</td>
                 <td><strong style="color: #28a745;"><?= $kemampuanKognitif['total_benar'] ?> soal</strong></td>
@@ -234,13 +234,13 @@
                 <td width="150">Strategi Pengajaran</td>
                 <td width="10">:</td>
                 <td>
-                    <?php if ($kemampuanKognitif['skor'] > 80): ?>
+                    <?php if ($kemampuanKognitif['skor'] >= 65): ?>
                         Berikan tantangan tingkat tinggi dengan soal aplikatif dan analisis kompleks.
-                        Fokuskan pada pengembangan kemampuan berpikir kritis dan problem solving.
-                    <?php elseif ($kemampuanKognitif['skor'] > 60): ?>
+                        Fokuskan pada pengembangan problem solving dan pemikiran kritis tingkat lanjut.
+                    <?php elseif ($kemampuanKognitif['skor'] >= 55): ?>
                         Pendalaman materi dan latihan soal dengan variasi kompleks.
                         Berikan kesempatan eksplorasi aplikasi konsep dalam konteks berbeda.
-                    <?php elseif ($kemampuanKognitif['skor'] > 40): ?>
+                    <?php elseif ($kemampuanKognitif['skor'] >= 45): ?>
                         Penjelasan ulang materi dengan pendekatan berbeda. Gunakan lebih banyak contoh konkret
                         dan sediakan latihan tambahan dengan tingkat kesulitan bertahap.
                     <?php else: ?>
@@ -253,7 +253,7 @@
                 <td>Tindak Lanjut</td>
                 <td>:</td>
                 <td>
-                    <?php if ($kemampuanKognitif['skor'] > 60): ?>
+                    <?php if ($kemampuanKognitif['skor'] >= 55): ?>
                         Lanjutkan dengan materi lanjutan, berikan proyek individual
                     <?php else: ?>
                         Perlu bimbingan khusus dan evaluasi berkala
@@ -308,11 +308,11 @@
     </table>
 
     <!-- BARU: Tabel Klasifikasi Kemampuan Kognitif -->
-    <h2>KLASIFIKASI KEMAMPUAN KOGNITIF</h2>
+    <h2>KLASIFIKASI KETERAMPILAN BERPIKIR KRITIS</h2>
     <table class="detail">
         <thead>
             <tr>
-                <th>Rentang Skor</th>
+                <th>Rentang T-Score</th>
                 <th>Kategori</th>
                 <th>Deskripsi</th>
                 <th>Rekomendasi Pengajaran</th>
@@ -320,31 +320,31 @@
         </thead>
         <tbody>
             <tr>
-                <td>80% - 100%</td>
+                <td>T-Score &ge; 65</td>
                 <td class="kognitif-sangat-tinggi">Sangat Tinggi</td>
-                <td>Pemahaman excellent, analisis dan aplikasi sangat baik</td>
+                <td>Keterampilan berpikir kritis sangat baik</td>
                 <td>Tantangan tingkat tinggi, problem solving kompleks</td>
             </tr>
             <tr>
-                <td>60% - 80%</td>
+                <td>55 &le; T-Score &lt; 65</td>
                 <td class="kognitif-tinggi">Tinggi</td>
-                <td>Pemahaman baik, analisis dan aplikasi baik</td>
+                <td>Keterampilan berpikir kritis baik</td>
                 <td>Pendalaman materi, variasi soal kompleks</td>
             </tr>
             <tr>
-                <td>40% - 60%</td>
-                <td class="kognitif-sedang">Rata-rata (Sedang)</td>
-                <td>Pemahaman cukup, perlu peningkatan analisis</td>
+                <td>45 &le; T-Score &lt; 55</td>
+                <td class="kognitif-sedang">Sedang</td>
+                <td>Keterampilan berpikir kritis cukup</td>
                 <td>Penjelasan ulang, pendekatan berbeda, latihan tambahan</td>
             </tr>
             <tr>
-                <td>20% - 40%</td>
+                <td>35 &le; T-Score &lt; 45</td>
                 <td class="kognitif-rendah">Rendah</td>
-                <td>Pemahaman terbatas, perlu review konsep dasar</td>
+                <td>Keterampilan berpikir kritis terbatas</td>
                 <td>Remedial pembelajaran, media interaktif</td>
             </tr>
             <tr>
-                <td>0% - 20%</td>
+                <td>T-Score &lt; 35</td>
                 <td class="kognitif-sangat-rendah">Sangat Rendah</td>
                 <td>Pemahaman sangat terbatas, pembelajaran ulang</td>
                 <td>Pendekatan individual, evaluasi metode pengajaran</td>
@@ -409,7 +409,7 @@
         ?>
 
         <!-- BARU: Data Kemampuan Kognitif untuk Analisis -->
-        <h3>Data Kemampuan Kognitif</h3>
+        <h3>Data Keterampilan Berpikir Kritis</h3>
         <table class="detail">
             <tr>
                 <th>Parameter</th>
@@ -417,7 +417,7 @@
                 <th>Keterangan</th>
             </tr>
             <tr>
-                <td>Skor Kognitif</td>
+                <td>T-Score Kritis</td>
                 <td><?= $kemampuanKognitif['skor'] ?>%</td>
                 <td><?= $klasifikasiKognitif['kategori'] ?></td>
             </tr>

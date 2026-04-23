@@ -63,7 +63,7 @@
                         <div class="f-icon"><i class="bi bi-bar-chart-line-fill"></i></div>
                         <div>
                             <h3>Laporan Mendalam</h3>
-                            <p>Laporan analisis profil kemampuan kognitif yang komprehensif dan dapat diunduh dalam format PDF.</p>
+                            <p>Laporan analisis profil keterampilan berpikir kritis yang komprehensif dan dapat diunduh dalam format PDF.</p>
                         </div>
                     </div>
                 </div>

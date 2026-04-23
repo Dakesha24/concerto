@@ -6,7 +6,7 @@
         <div class="col-12">
             <span class="text-uppercase fw-bold text-primary small letter-spacing-2" style="letter-spacing: 2px;">Analisis</span>
             <h2 class="fw-bold text-dark">Riwayat Ujian</h2>
-            <p class="text-muted">Pantau hasil dan progress kemampuan kognitif Anda.</p>
+            <p class="text-muted">Pantau hasil dan progress keterampilan berpikir kritis Anda.</p>
         </div>
     </div>
 
