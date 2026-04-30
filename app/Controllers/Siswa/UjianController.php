@@ -275,6 +275,12 @@ class UjianController extends Controller
         $SE_new   = $totalIi > 0 ? 1 / sqrt($totalIi) : 1;
         $delta_SE = $SE_old - $SE_new;
 
+        // Tandai soal ini sebagai sudah dijawab SEBELUM query soal berikutnya
+        // agar tidak terpilih lagi (terutama oleh fallback yang pakai ABS(difficulty - theta))
+        if (!in_array($soalId, $catParams['answered_questions'])) {
+            $catParams['answered_questions'][] = $soalId;
+        }
+
         // Pemilihan soal berikutnya (Step-up/Step-down)
         if ($isBenar) {
             $theta        = $b;
@@ -288,29 +294,21 @@ class UjianController extends Controller
                 ->where('tingkat_kesulitan <', $b);
         }
 
-        if (!empty($catParams['answered_questions'])) {
-            $nextQuestion->whereNotIn('soal_id', $catParams['answered_questions']);
-        }
-
+        $nextQuestion->whereNotIn('soal_id', $catParams['answered_questions']);
         $nextQuestion = $nextQuestion->orderBy('tingkat_kesulitan', $isBenar ? 'ASC' : 'DESC')->first();
 
         // Fallback: jika tidak ada soal di arah step-up/down, ambil soal terdekat yang belum dijawab
         if (!$nextQuestion) {
             $fallback = $this->soalUjianModel
                 ->select('*, ABS(tingkat_kesulitan - ' . (float)$theta . ') as distance')
-                ->where('ujian_id', $soal['ujian_id']);
-            if (!empty($catParams['answered_questions'])) {
-                $fallback->whereNotIn('soal_id', $catParams['answered_questions']);
-            }
+                ->where('ujian_id', $soal['ujian_id'])
+                ->whereNotIn('soal_id', $catParams['answered_questions']);
             $nextQuestion = $fallback->orderBy('distance', 'ASC')->first();
         }
 
         // Update CAT params
         $catParams['theta'] = $theta;
         $catParams['SE']    = $SE_new;
-        if (!in_array($soalId, $catParams['answered_questions'])) {
-            $catParams['answered_questions'][] = $soalId;
-        }
         $catParams['current_question'] = $nextQuestion;
         $catParams['total_questions']  = count($catParams['answered_questions']);
         session()->set('cat_params', $catParams);

@@ -1499,10 +1499,10 @@ class Admin extends Controller
             return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
         }
 
-        $useWaktu   = $this->request->getPost('use_waktu')   ? 1 : 0;
-        $useSeMin   = $this->request->getPost('use_se_min')  ? 1 : 0;
-        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
-        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
 
         if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
             return redirect()->back()->withInput()->with('error', 'Minimal satu stopping rule harus diaktifkan.');
@@ -1564,10 +1564,10 @@ class Admin extends Controller
 
         // 3. Admin tidak memerlukan validasi akses
 
-        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
-        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
-        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
-        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
 
         if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
             return redirect()->back()->withInput()->with('errors', ['stopping_rule' => 'Minimal satu stopping rule harus diaktifkan.']);
@@ -1593,8 +1593,11 @@ class Admin extends Controller
         ];
 
         // 5. Lakukan update dan berikan notifikasi
+        log_message('debug', '[editUjian] POST data: ' . json_encode($this->request->getPost()));
+        log_message('debug', '[editUjian] stopping rules → use_waktu=' . $useWaktu . ' use_se_min=' . $useSeMin . ' use_delta_se=' . $useDeltaSe . ' use_max_soal=' . $useMaxSoal);
         try {
             $this->ujianModel->update($id, $data);
+            log_message('debug', '[editUjian] query: ' . $this->db->getLastQuery());
             return redirect()->to('admin/ujian/')->with('success', 'Ujian berhasil diperbarui.');
         } catch (\Exception $e) {
             log_message('error', 'Admin gagal mengupdate ujian: ' . $e->getMessage());

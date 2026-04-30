@@ -46,10 +46,10 @@ class UjianController extends Controller
     {
         $userId = session()->get('user_id');
 
-        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
-        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
-        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
-        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
 
         if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
             return redirect()->to('guru/ujian')->with('error', 'Minimal satu stopping rule harus diaktifkan.');
@@ -84,10 +84,10 @@ class UjianController extends Controller
 
     public function edit($id)
     {
-        $useWaktu   = $this->request->getPost('use_waktu')    ? 1 : 0;
-        $useSeMin   = $this->request->getPost('use_se_min')   ? 1 : 0;
-        $useDeltaSe = $this->request->getPost('use_delta_se') ? 1 : 0;
-        $useMaxSoal = $this->request->getPost('use_max_soal') ? 1 : 0;
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
 
         if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
             return redirect()->to('guru/ujian')->with('error', 'Minimal satu stopping rule harus diaktifkan.');

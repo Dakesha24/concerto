@@ -77,17 +77,32 @@ class UjianController extends Controller
             return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
         }
 
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->back()->withInput()->with('error', 'Minimal satu stopping rule harus diaktifkan.');
+        }
+
         $data = [
-            'jenis_ujian_id'    => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian'        => $this->request->getPost('nama_ujian'),
-            'kode_ujian'        => $this->request->getPost('kode_ujian'),
-            'deskripsi'         => $this->request->getPost('deskripsi'),
-            'se_awal'           => $this->request->getPost('se_awal'),
-            'se_minimum'        => $this->request->getPost('se_minimum'),
-            'delta_se_minimum'  => $this->request->getPost('delta_se_minimum'),
-            'durasi'            => $this->request->getPost('durasi'),
-            'kelas_id'          => $this->request->getPost('kelas_id') ?: null,
-            'created_by'        => session()->get('user_id'),
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id') ?: null,
+            'created_by'            => session()->get('user_id'),
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => (int)(bool)$this->request->getPost('tampilkan_pembahasan'),
         ];
 
         try {
@@ -121,16 +136,31 @@ class UjianController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $useWaktu   = (int)(bool)$this->request->getPost('use_waktu');
+        $useSeMin   = (int)(bool)$this->request->getPost('use_se_min');
+        $useDeltaSe = (int)(bool)$this->request->getPost('use_delta_se');
+        $useMaxSoal = (int)(bool)$this->request->getPost('use_max_soal');
+
+        if (!$useWaktu && !$useSeMin && !$useDeltaSe && !$useMaxSoal) {
+            return redirect()->back()->withInput()->with('errors', ['stopping_rule' => 'Minimal satu stopping rule harus diaktifkan.']);
+        }
+
         $data = [
-            'jenis_ujian_id'    => $this->request->getPost('jenis_ujian_id'),
-            'nama_ujian'        => $this->request->getPost('nama_ujian'),
-            'kode_ujian'        => $this->request->getPost('kode_ujian'),
-            'deskripsi'         => $this->request->getPost('deskripsi'),
-            'se_awal'           => $this->request->getPost('se_awal'),
-            'se_minimum'        => $this->request->getPost('se_minimum'),
-            'delta_se_minimum'  => $this->request->getPost('delta_se_minimum'),
-            'durasi'            => $this->request->getPost('durasi'),
-            'kelas_id'          => $this->request->getPost('kelas_id') ?: null,
+            'jenis_ujian_id'        => $this->request->getPost('jenis_ujian_id'),
+            'nama_ujian'            => $this->request->getPost('nama_ujian'),
+            'kode_ujian'            => $this->request->getPost('kode_ujian'),
+            'deskripsi'             => $this->request->getPost('deskripsi'),
+            'se_awal'               => $this->request->getPost('se_awal'),
+            'se_minimum'            => $this->request->getPost('se_minimum'),
+            'delta_se_minimum'      => $this->request->getPost('delta_se_minimum'),
+            'maksimal_soal_tampil'  => $this->request->getPost('maksimal_soal_tampil') ?: 30,
+            'durasi'                => $this->request->getPost('durasi'),
+            'kelas_id'              => $this->request->getPost('kelas_id') ?: null,
+            'use_waktu'             => $useWaktu,
+            'use_se_min'            => $useSeMin,
+            'use_delta_se'          => $useDeltaSe,
+            'use_max_soal'          => $useMaxSoal,
+            'tampilkan_pembahasan'  => (int)(bool)$this->request->getPost('tampilkan_pembahasan'),
         ];
 
         try {
