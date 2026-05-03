@@ -367,8 +367,8 @@
         <?php
         // Ambil theta terakhir (dari jawaban terakhir)
         $lastTheta = end($detailJawaban)['theta_saat_ini'];
-        // Hitung nilai akhir: 50 + 16.6 * theta
-        $finalScore = 50 + (16.67 * $lastTheta);
+        // Hitung nilai akhir: 50 + ((50 / 3) * theta)
+        $finalScore = 50 + ((50 / 3) * $lastTheta);
         // Nilai dalam skala 0-100
         $finalGrade = min(100, max(0, round(($finalScore / 100) * 100)));
         ?>
@@ -416,7 +416,7 @@
             <div class="cognitive-grid">
                 <div class="cognitive-item">
                     <span class="cognitive-value"><?= $kemampuanKognitif['skor'] ?></span>
-                    <span class="cognitive-label">T-SCORE KRITIS</span>
+                    <span class="cognitive-label">CT SKOR</span>
                 </div>
                 <div class="cognitive-item">
                     <span class="cognitive-value"><?= $klasifikasiKognitif['kategori'] ?></span>
@@ -432,7 +432,7 @@
                 </div>
             </div>
             <div class="cognitive-formula">
-                <strong>Formula:</strong> T-Score = 50 + 10 &times; ((&theta;_fi + &theta;&#x0305;_f) / SD)
+                <strong>Formula:</strong> Skor Akhir = 50 + ((50 / 3) &times; &theta;)
             </div>
         </div>
 

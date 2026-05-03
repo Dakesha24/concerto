@@ -248,7 +248,7 @@
             <h4 class="mb-3">Analisis Keterampilan Berpikir Kritis</h4>
             <div class="row">
                 <div class="col-md-8">
-                    <div class="info-label">T-Score Kritis:</div>
+                    <div class="info-label">CT Skor:</div>
                     <div class="info-value">
                         <span class="<?= esc($klasifikasiKognitif['class'], 'attr') ?>">
                             <?= $kemampuanKognitif['skor'] ?> - <?= $klasifikasiKognitif['kategori'] ?>
@@ -295,7 +295,7 @@
                             <th>Jawaban Benar</th>
                             <th>Jawaban Salah</th>
                             <th>Skor Ujian (Theta)</th>
-                            <th>T-Score Kritis</th>
+                            <th>CT Skor</th>
                         </tr>
                     </thead>
                     <tbody>

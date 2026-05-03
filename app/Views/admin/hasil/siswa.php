@@ -13,7 +13,7 @@
                     <h4 class="card-title mb-0">
                         <i class="fas fa-chart-line"></i> Hasil Ujian: <?= esc($ujian['nama_ujian']) ?>
                     </h4>
-                    <a href="<?= base_url('guru/hasil-ujian') ?>" class="btn btn-secondary">
+                    <a href="<?= base_url('admin/hasil-ujian') ?>" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i>Kembali
                     </a>
                 </div>

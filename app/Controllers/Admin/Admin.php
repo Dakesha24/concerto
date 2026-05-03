@@ -2204,64 +2204,18 @@ class Admin extends Controller
 
     private function hitungKemampuanKognitif(float $theta_fi, int $ujianId): float
     {
-        ['theta_bar' => $theta_bar, 'sd' => $sd] = $this->getStatistikTheta($ujianId);
-
-        if ($sd == 0) {
-            return 50.0;
-        }
-
-        return round(50 + 10 * (($theta_fi + $theta_bar) / $sd), 2);
-    }
-
-    private function getStatistikTheta(int $ujianId): array
-    {
-        static $cache = [];
-
-        if (isset($cache[$ujianId])) {
-            return $cache[$ujianId];
-        }
-
-        $db   = \Config\Database::connect();
-        $rows = $db->query(
-            "SELECT hu.theta_saat_ini
-             FROM hasil_ujian hu
-             INNER JOIN peserta_ujian pu ON pu.peserta_ujian_id = hu.peserta_ujian_id
-             INNER JOIN jadwal_ujian ju  ON ju.jadwal_id = pu.jadwal_id
-             WHERE ju.ujian_id = ?
-               AND pu.status   = 'selesai'
-               AND hu.waktu_menjawab = (
-                   SELECT MAX(hu2.waktu_menjawab)
-                   FROM hasil_ujian hu2
-                   WHERE hu2.peserta_ujian_id = hu.peserta_ujian_id
-               )",
-            [$ujianId]
-        )->getResultArray();
-
-        $thetas = array_map('floatval', array_column($rows, 'theta_saat_ini'));
-        $n      = count($thetas);
-
-        if ($n < 2) {
-            $cache[$ujianId] = ['theta_bar' => $n === 1 ? $thetas[0] : 0.0, 'sd' => 0.0];
-            return $cache[$ujianId];
-        }
-
-        $theta_bar = array_sum($thetas) / $n;
-        $variance  = array_sum(array_map(fn($t) => ($t - $theta_bar) ** 2, $thetas)) / $n;
-        $sd        = sqrt($variance);
-
-        $cache[$ujianId] = ['theta_bar' => $theta_bar, 'sd' => $sd];
-        return $cache[$ujianId];
+        return round(50 + ((50 / 3) * $theta_fi), 2);
     }
 
     private function getKlasifikasiKognitif(float $skor): array
     {
-        if ($skor < 35) {
+        if ($skor < 20) {
             return ['kategori' => 'Sangat Rendah', 'class' => 'text-danger',  'bg_class' => 'bg-danger'];
-        } elseif ($skor < 45) {
+        } elseif ($skor < 40) {
             return ['kategori' => 'Rendah',        'class' => 'text-orange',  'bg_class' => 'bg-orange'];
-        } elseif ($skor < 55) {
+        } elseif ($skor < 60) {
             return ['kategori' => 'Sedang',         'class' => 'text-warning', 'bg_class' => 'bg-warning'];
-        } elseif ($skor < 65) {
+        } elseif ($skor <= 80) {
             return ['kategori' => 'Tinggi',         'class' => 'text-info',    'bg_class' => 'bg-info'];
         } else {
             return ['kategori' => 'Sangat Tinggi',  'class' => 'text-success', 'bg_class' => 'bg-success'];
@@ -2547,6 +2501,7 @@ class Admin extends Controller
         $data = [
             'hasil' => $hasil,
             'detailJawaban' => $detailJawabanDenganDurasi,
+            'lastJawaban' => $lastResult ?: null,
             'totalSoal' => $totalSoal,
             'jawabanBenar' => $jawabanBenar,
             'kemampuanKognitif' => $kemampuanKognitif,
@@ -2617,7 +2572,7 @@ class Admin extends Controller
             $rataRataWaktuFormat = '-';
         }
 
-        $data = ['hasil' => $hasil, 'detailJawaban' => $detailJawabanDenganDurasi, 'finalScore' => $skor_akhir, 'lastTheta' => $theta_akhir, 'jawabanBenar' => $jawabanBenar, 'kemampuanKognitif' => $kemampuanKognitif, 'klasifikasiKognitif' => $klasifikasiKognitif, 'rataRataWaktuFormat' => $rataRataWaktuFormat];
+        $data = ['hasil' => $hasil, 'detailJawaban' => $detailJawabanDenganDurasi, 'lastJawaban' => $lastResult ?: null, 'finalScore' => $skor_akhir, 'lastTheta' => $theta_akhir, 'jawabanBenar' => $jawabanBenar, 'kemampuanKognitif' => $kemampuanKognitif, 'klasifikasiKognitif' => $klasifikasiKognitif, 'rataRataWaktuFormat' => $rataRataWaktuFormat];
 
         $filename = 'hasil_ujian_' . preg_replace('/[^A-Za-z0-9_\-]/', '_', $hasil['nama_lengkap']) . '_' . date('dmY') . '.xls';
         header('Content-Type: application/vnd.ms-excel');
@@ -2702,6 +2657,7 @@ class Admin extends Controller
         $data = [
             'hasil' => $hasil,
             'detailJawaban' => $detailJawabanDenganDurasi,
+            'lastJawaban' => $lastResult ?: null,
             'jawabanBenar' => $jawabanBenar,
             'totalSoal' => $totalSoal,
             'kemampuanKognitif' => $kemampuanKognitif,

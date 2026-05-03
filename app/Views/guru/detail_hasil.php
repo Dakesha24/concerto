@@ -83,8 +83,8 @@
   <?php
   // Ambil theta terakhir (dari jawaban terakhir)
   $lastTheta = end($detailJawaban)['theta_saat_ini'];
-  // Hitung nilai akhir: 50 + 16.6 * theta
-  $finalScore = 50 + (16.67 * $lastTheta);
+  // Hitung nilai akhir: 50 + ((50 / 3) * theta)
+  $finalScore = 50 + ((50 / 3) * $lastTheta);
   // Nilai dalam skala 0-100
   $finalGrade = min(100, max(0, round(($finalScore / 100) * 100)));
   ?>
@@ -185,7 +185,7 @@
           <div class="mb-4">
             <h6>Rumus Dasar:</h6>
             <div class="bg-light p-3 rounded">
-              <code>T-Score = 50 + 10 × ((θ_fi + θ̄_f) / SD)</code>
+              <code>CT Skor = 50 + ((50 / 3) × θ_akhir)</code>
             </div>
           </div>
 
@@ -202,18 +202,18 @@
           <div class="mb-4">
             <h6>Klasifikasi Keterampilan Berpikir Kritis:</h6>
             <ul>
-              <li><span class="badge bg-success">Sangat Tinggi</span>: T-Score ≥ 65</li>
-              <li><span class="badge bg-info">Tinggi</span>: T-Score 55 – 64</li>
-              <li><span class="badge bg-warning">Sedang</span>: T-Score 45 – 54</li>
-              <li><span class="badge bg-orange text-white">Rendah</span>: T-Score 35 – 44</li>
-              <li><span class="badge bg-danger">Sangat Rendah</span>: T-Score &lt; 35</li>
+              <li><span class="badge bg-success">Sangat Tinggi</span>: CT Skor ≥ 65</li>
+              <li><span class="badge bg-info">Tinggi</span>: CT Skor 55 – 64</li>
+              <li><span class="badge bg-warning">Sedang</span>: CT Skor 45 – 54</li>
+              <li><span class="badge bg-orange text-white">Rendah</span>: CT Skor 35 – 44</li>
+              <li><span class="badge bg-danger">Sangat Rendah</span>: CT Skor &lt; 35</li>
             </ul>
           </div>
 
           <div class="bg-info-subtle p-3 rounded">
             <small>
-              <strong>Catatan:</strong> Rumus ini menggunakan koreksi untuk faktor menebak,
-              sehingga memberikan estimasi yang lebih akurat tentang keterampilan berpikir kritis siswa dalam memahami materi ujian.
+              <strong>Catatan:</strong> Rumus ini mengonversi theta akhir siswa ke skala CT Skor
+              untuk menampilkan keterampilan berpikir kritis siswa pada laporan hasil.
             </small>
           </div>
         </div>
@@ -283,7 +283,7 @@
               </div>
             </div>
             <div class="mb-2">
-              <small class="text-muted">T-Score Kritis:</small>
+              <small class="text-muted">CT Skor:</small>
               <div class="progress mb-1" style="height: 20px;">
                 <div class="progress-bar <?= $klasifikasiKognitif['bg_class'] ?>" role="progressbar"
                   style="width: <?= $kemampuanKognitif['skor'] ?>%">

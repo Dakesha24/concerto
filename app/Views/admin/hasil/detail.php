@@ -120,12 +120,12 @@
                         <tr>
                             <td>Standard Error Akhir</td>
                             <td>:</td>
-                            <td><strong><?= number_format(end($detailJawaban)['se_saat_ini'], 3) ?></strong></td>
+                            <td><strong><?= number_format((float) ($lastJawaban['se_saat_ini'] ?? 0), 3) ?></strong></td>
                         </tr>
                         <tr>
                             <td width="200">Theta Akhir (θ)</td>
                             <td width="20">:</td>
-                            <td><strong><?= number_format(end($detailJawaban)['theta_saat_ini'], 3) ?></strong></td>
+                            <td><strong><?= number_format((float) ($lastJawaban['theta_saat_ini'] ?? 0), 3) ?></strong></td>
                         </tr>
 
                     </table>
@@ -137,12 +137,12 @@
                         <tr>
                             <td>Skor</td>
                             <td>:</td>
-                            <td><strong class="fs-4 text-primary"><?= number_format(50 + (16.6 * end($detailJawaban)['theta_saat_ini']), 1) ?></strong></td>
+                            <td><strong class="fs-4 text-primary"><?= number_format($kemampuanKognitif['skor'], 2) ?></strong></td>
                         </tr>
                         <tr>
                             <td>Nilai (Skala 0-100)</td>
                             <td>:</td>
-                            <td><strong class="fs-4 text-success"><?= min(100, max(0, round(((50 + (16.6 * end($detailJawaban)['theta_saat_ini'])) / 100) * 100))) ?></strong></td>
+                            <td><strong class="fs-4 text-success"><?= number_format(min(100, max(0, $kemampuanKognitif['skor'])), 2) ?></strong></td>
                         </tr>
                     </table>
                 </div>
@@ -154,22 +154,20 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Analisis Keterampilan Berpikir Kritis</h5>
-            <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#cognitiveHelp" aria-expanded="false">
+            <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#cognitiveHelp" aria-expanded="true">
                 <i class="fas fa-info-circle me-1"></i>Info Perhitungan
             </button>
         </div>
 
-        <div class="collapse" id="cognitiveHelp">
+        <div class="collapse show" id="cognitiveHelp">
             <div class="card-body bg-light">
-                <h6 class="fw-bold">Rumus T-Score Keterampilan Berpikir Kritis:</h6>
-                <p class="mb-2"><strong>T-Score = 50 + 10 × ((θ_fi + θ̄_f) / SD)</strong></p>
+                <h6 class="fw-bold">Rumus Skor Keterampilan Berpikir Kritis:</h6>
+                <p class="mb-2"><strong>CT Skor = 50 + ((50 / 3) × θ_akhir)</strong></p>
                 <ul class="small mb-0">
-                    <li><strong>θ_fi</strong>: Theta akhir siswa</li>
-                    <li><strong>θ̄_f</strong>: Rata-rata theta seluruh peserta ujian yang sama</li>
-                    <li><strong>SD</strong>: Standar deviasi theta seluruh peserta</li>
+                    <li><strong>θ_akhir</strong>: Theta akhir siswa</li>
                 </ul>
                 <p class="small mt-2 mb-0 text-muted">
-                    Formula ini menggunakan pendekatan norm-referenced (acuan norma) untuk menilai keterampilan berpikir kritis siswa relatif terhadap kelompoknya.
+                    Formula ini mengonversi theta akhir siswa ke skala CT Skor pada laporan hasil.
                 </p>
             </div>
         </div>
@@ -181,9 +179,9 @@
                         <div class="col-md-6">
                             <table class="table table-borderless">
                                 <tr>
-                                    <td width="180">T-Score Kritis</td>
+                                    <td width="180">CT Skor</td>
                                     <td width="20">:</td>
-                                    <td><strong class="fs-4 text-primary"><?= $kemampuanKognitif['skor'] ?></strong></td>
+                                    <td><strong class="fs-4 text-primary"><?= number_format($kemampuanKognitif['skor'], 2) ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td>Kategori</td>
@@ -216,7 +214,7 @@
                                 <tr>
                                     <td>Persentase Benar</td>
                                     <td>:</td>
-                                    <td><strong><?= round(($kemampuanKognitif['total_benar'] / $totalSoal) * 100, 1) ?>%</strong></td>
+                                    <td><strong><?= $totalSoal > 0 ? round(($kemampuanKognitif['total_benar'] / $totalSoal) * 100, 1) : 0 ?>%</strong></td>
                                 </tr>
                             </table>
                         </div>

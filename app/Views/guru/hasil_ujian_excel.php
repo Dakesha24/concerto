@@ -170,8 +170,8 @@
     <?php
     // Ambil theta terakhir (dari jawaban terakhir)
     $lastTheta = end($detailJawaban)['theta_saat_ini'];
-    // Hitung nilai akhir: 50 + 16.6 * theta
-    $finalScore = 50 + (16.6 * $lastTheta);
+    // Hitung nilai akhir: 50 + ((50 / 3) * theta)
+    $finalScore = 50 + ((50 / 3) * $lastTheta);
     // Nilai dalam skala 0-100
     $finalGrade = min(100, max(0, round(($finalScore / 100) * 100)));
     ?>
@@ -209,7 +209,7 @@
         <h3>ANALISIS KETERAMPILAN BERPIKIR KRITIS</h3>
         <table class="info-table">
             <tr>
-                <td class="label">T-Score Kritis</td>
+                <td class="label">CT Skor</td>
                 <td><strong style="font-size: 14px; color: #6c757d;"><?= $kemampuanKognitif['skor'] ?></strong></td>
                 <td class="label">Total Benar</td>
                 <td><strong style="color: #28a745;"><?= $kemampuanKognitif['total_benar'] ?> soal</strong></td>
@@ -222,7 +222,7 @@
             </tr>
         </table>
         <p style="font-size: 10px; margin: 10px 0 0 0; color: #666;">
-            <strong>Formula:</strong> Skor Akhir = 50 + (16.67 * &theta;)
+            <strong>Formula:</strong> Skor Akhir = 50 + ((50 / 3) * &theta;)
         </p>
     </div>
 
@@ -312,7 +312,7 @@
     <table class="detail">
         <thead>
             <tr>
-                <th>Rentang T-Score</th>
+                <th>Rentang CT Skor</th>
                 <th>Kategori</th>
                 <th>Deskripsi</th>
                 <th>Rekomendasi Pengajaran</th>
@@ -320,31 +320,31 @@
         </thead>
         <tbody>
             <tr>
-                <td>T-Score &ge; 65</td>
+                <td>CT Skor &ge; 65</td>
                 <td class="kognitif-sangat-tinggi">Sangat Tinggi</td>
                 <td>Keterampilan berpikir kritis sangat baik</td>
                 <td>Tantangan tingkat tinggi, problem solving kompleks</td>
             </tr>
             <tr>
-                <td>55 &le; T-Score &lt; 65</td>
+                <td>55 &le; CT Skor &lt; 65</td>
                 <td class="kognitif-tinggi">Tinggi</td>
                 <td>Keterampilan berpikir kritis baik</td>
                 <td>Pendalaman materi, variasi soal kompleks</td>
             </tr>
             <tr>
-                <td>45 &le; T-Score &lt; 55</td>
+                <td>45 &le; CT Skor &lt; 55</td>
                 <td class="kognitif-sedang">Sedang</td>
                 <td>Keterampilan berpikir kritis cukup</td>
                 <td>Penjelasan ulang, pendekatan berbeda, latihan tambahan</td>
             </tr>
             <tr>
-                <td>35 &le; T-Score &lt; 45</td>
+                <td>35 &le; CT Skor &lt; 45</td>
                 <td class="kognitif-rendah">Rendah</td>
                 <td>Keterampilan berpikir kritis terbatas</td>
                 <td>Remedial pembelajaran, media interaktif</td>
             </tr>
             <tr>
-                <td>T-Score &lt; 35</td>
+                <td>CT Skor &lt; 35</td>
                 <td class="kognitif-sangat-rendah">Sangat Rendah</td>
                 <td>Pemahaman sangat terbatas, pembelajaran ulang</td>
                 <td>Pendekatan individual, evaluasi metode pengajaran</td>
@@ -417,7 +417,7 @@
                 <th>Keterangan</th>
             </tr>
             <tr>
-                <td>T-Score Kritis</td>
+                <td>CT Skor</td>
                 <td><?= $kemampuanKognitif['skor'] ?>%</td>
                 <td><?= $klasifikasiKognitif['kategori'] ?></td>
             </tr>

@@ -5,24 +5,14 @@ namespace App\Traits;
 trait CATTrait
 {
     /**
-     * Hitung T-score keterampilan berpikir kritis.
+     * Hitung skor keterampilan berpikir kritis dari theta akhir.
      * T_score = 50 + 10 * ((θ_fi + θ̄_f) / SD)
      *
-     * Jika hanya 1 siswa atau SD = 0, kembalikan 50 (posisi rata-rata).
+     * Rumus ini langsung mengonversi theta akhir ke skala skor.
      */
     protected function hitungKemampuanKognitif(float $theta_fi, $ujianId = null): float
     {
-        if ($ujianId === null) {
-            return round(max(0, 50 + (16.67 * $theta_fi)), 2);
-        }
-
-        ['theta_bar' => $theta_bar, 'sd' => $sd] = $this->getStatistikTheta((int)$ujianId);
-
-        if ($sd == 0) {
-            return 50.0;
-        }
-
-        return round(50 + 10 * (($theta_fi + $theta_bar) / $sd), 2);
+        return round(50 + ((50 / 3) * $theta_fi), 2);
     }
 
     /**
@@ -75,13 +65,13 @@ trait CATTrait
      */
     protected function getKlasifikasiKognitif(float $skor): array
     {
-        if ($skor < 35) {
+        if ($skor < 20) {
             return ['kategori' => 'Sangat Rendah', 'class' => 'text-danger',  'bg_class' => 'bg-danger'];
-        } elseif ($skor < 45) {
+        } elseif ($skor < 40) {
             return ['kategori' => 'Rendah',        'class' => 'text-orange',  'bg_class' => 'bg-orange'];
-        } elseif ($skor < 55) {
+        } elseif ($skor < 60) {
             return ['kategori' => 'Sedang',         'class' => 'text-warning', 'bg_class' => 'bg-warning'];
-        } elseif ($skor < 65) {
+        } elseif ($skor <= 80) {
             return ['kategori' => 'Tinggi',         'class' => 'text-info',    'bg_class' => 'bg-info'];
         } else {
             return ['kategori' => 'Sangat Tinggi',  'class' => 'text-success', 'bg_class' => 'bg-success'];

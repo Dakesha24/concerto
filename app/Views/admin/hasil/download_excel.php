@@ -153,7 +153,7 @@
         <td class="label">Nilai (Skala 0-100)</td>
         <td><strong style="font-size: 14px; color: #28a745;"><?= min(100, max(0, round(($finalScore / 100) * 100))) ?></strong></td>
         <td class="label">Persentase Benar</td>
-        <td><strong><?= round(($jawabanBenar / count($detailJawaban)) * 100, 1) ?>%</strong></td>
+        <td><strong><?= count($detailJawaban) > 0 ? round(($jawabanBenar / count($detailJawaban)) * 100, 1) : 0 ?>%</strong></td>
       </tr>
     </table>
   </div>
@@ -163,7 +163,7 @@
     <h3>ANALISIS KETERAMPILAN BERPIKIR KRITIS</h3>
     <table class="info-table">
       <tr>
-        <td class="label">T-Score Kritis</td>
+        <td class="label">CT Skor</td>
         <td><strong style="font-size: 14px; color: #6c757d;"><?= $kemampuanKognitif['skor'] ?></strong></td>
         <td class="label">Total Benar</td>
         <td><strong style="color: #28a745;"><?= $kemampuanKognitif['total_benar'] ?> soal</strong></td>
@@ -178,12 +178,12 @@
         <td class="label">Rata-rata Pilihan/Soal</td>
         <td><strong><?= $kemampuanKognitif['rata_rata_pilihan'] ?></strong></td>
         <td class="label">Persentase Benar</td>
-        <td><strong><?= round(($kemampuanKognitif['total_benar'] / count($detailJawaban)) * 100, 1) ?>%</strong></td>
+        <td><strong><?= count($detailJawaban) > 0 ? round(($kemampuanKognitif['total_benar'] / count($detailJawaban)) * 100, 1) : 0 ?>%</strong></td>
       </tr>
     </table>
     <p style="font-size: 10px; margin: 10px 0 0 0; color: #666;">
-      <strong>Formula:</strong> T-Score = 50 + 10 × ((θ_fi + θ̄_f) / SD)
-      <br>θ_fi=Theta akhir siswa, θ̄_f=Rata-rata theta peserta, SD=Standar deviasi theta
+      <strong>Formula:</strong> Skor Akhir = 50 + ((50 / 3) × θ)
+      <br>θ = theta akhir siswa
     </p>
   </div>
 
