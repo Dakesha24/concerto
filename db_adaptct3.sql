@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sql102.infinityfree.com
--- Generation Time: May 04, 2026 at 01:58 PM
+-- Generation Time: May 04, 2026 at 01:05 PM
 -- Server version: 11.4.10-MariaDB
 -- PHP Version: 7.2.22
 
@@ -27,6 +27,8 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `bank_ujian`
 --
+
+SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `bank_ujian`;
 CREATE TABLE `bank_ujian` (
@@ -3427,6 +3429,8 @@ ALTER TABLE `ujian`
   ADD CONSTRAINT `ujian_ibfk_1` FOREIGN KEY (`jenis_ujian_id`) REFERENCES `jenis_ujian` (`jenis_ujian_id`),
   ADD CONSTRAINT `ujian_ibfk_2` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`kelas_id`),
   ADD CONSTRAINT `ujian_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`);
+SET FOREIGN_KEY_CHECKS = 1;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
