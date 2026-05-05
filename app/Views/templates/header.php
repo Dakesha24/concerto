@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONCERTO</title>
-    <link rel="icon" type="image/png" href="<?= base_url('assets/images/icon-cat.png') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/images/icon-cat.png') ?>">
-    <link rel="shortcut icon" href="<?= base_url('assets/images/icon-cat.png') ?>">
+    <title>adaptct</title>
+    <link rel="icon" type="image/png" href="<?= base_url('assets/images/icon-adaptct.png') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/images/icon-adaptct.png') ?>">
+    <link rel="shortcut icon" href="<?= base_url('assets/images/icon-adaptct.png') ?>">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
