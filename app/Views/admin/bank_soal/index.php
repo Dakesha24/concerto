@@ -7,7 +7,7 @@
         <div>
             <p class="pg-eyebrow">Bank Soal</p>
             <h1 class="pg-title">Kelola Bank Soal</h1>
-            <p class="pg-sub">Kelola semua bank soal yang tersedia dalam sistem CONCERTO.</p>
+            <p class="pg-sub">Kelola semua bank soal yang tersedia dalam sistem ADAPT-CT.</p>
         </div>
         <button type="button" class="btn-pg-action" data-bs-toggle="modal" data-bs-target="#modalTambahBankSoal">
             <i class="bi bi-plus-lg"></i> Tambah Bank Soal

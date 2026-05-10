@@ -3,18 +3,18 @@
         <div class="row">
             <div class="col-lg-5 mb-4">
                 <div class="footer-brand">
-                    <div class="footer-brand-icon">C</div>
-                    <span class="footer-brand-name">CONCERTO</span>
+                    <img src="<?= base_url('assets/images/icon-adaptct.png') ?>" alt="ADAPT-CT" class="footer-brand-logo">
+                    <span class="footer-brand-name">ADAPT-CT</span>
                 </div>
                 <p class="footer-description">
                     Platform asesmen adaptif berbasis web yang menggunakan algoritma <i>Computerized Adaptive Testing</i>, dirancang untuk mengukur kemampuan berpikir kritis peserta tes khususnya pada bidang Fisika secara akurat, efisien, dan adaptif.
                 </p>
                 <div class="footer-social">
-                    <a href="https://www.instagram.com/phyfacat/" class="footer-social-link" target="_blank" title="Instagram">
-                        <i class="bi bi-instagram"></i>
+                    <a href="https://scholar.google.com/citations?user=GzsGTqsAAAAJ&hl=en&oi=ao" class="footer-social-link" target="_blank" title="Google Scholar">
+                        <i class="bi bi-mortarboard-fill"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/jauza-amalia-906070328/?originalSubdomain=id" class="footer-social-link" target="_blank" title="LinkedIn">
-                        <i class="bi bi-linkedin"></i>
+                    <a href="https://scholar.google.com/citations?user=Y3_jGLoAAAAJ&hl=en&oi=ao" class="footer-social-link" target="_blank" title="Google Scholar">
+                        <i class="bi bi-mortarboard-fill"></i>
                     </a>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     </li>
                     <li>
                         <i class="bi bi-envelope-fill"></i>
-                        <a href="mailto:jauzaamalia@upi.edu">jauzaamalia@upi.edu</a>
+                        <a href="mailto:abdulsalam@upi.edu">abdulsalam@upi.edu</a>
                     </li>
                     <li>
                         <i class="bi bi-map-fill"></i>
@@ -47,7 +47,7 @@
 
         <div class="row footer-bottom-row align-items-center">
             <div class="col-md-6">
-                <p class="footer-copyright">&copy; <?= date('Y') ?> CONCERTO. All rights reserved.</p>
+                <p class="footer-copyright">&copy; <?= date('Y') ?> ADAPT-CT. All rights reserved.</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <a href="#" class="footer-legal-link">Kebijakan Privasi</a>
@@ -71,17 +71,10 @@
         margin-bottom: 16px;
     }
 
-    .footer-brand-icon {
-        background-color: #ffda1a;
-        color: #001a4f;
-        width: 38px;
-        height: 38px;
-        border-radius: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-size: 1.1rem;
+    .footer-brand-logo {
+        height: 36px;
+        width: auto;
+        filter: brightness(0) invert(1);
         flex-shrink: 0;
     }
 

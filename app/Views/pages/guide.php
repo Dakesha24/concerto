@@ -6,7 +6,7 @@
 <div class="page-header">
     <div class="container">
         <p class="page-label">Panduan</p>
-        <h1 class="page-title">Panduan Penggunaan CONCERTO</h1>
+        <h1 class="page-title">Panduan Penggunaan ADAPT-CT</h1>
         <div class="title-accent"></div>
         <p class="page-desc">Ikuti langkah-langkah berikut untuk memulai asesmen adaptif Fisika</p>
     </div>
@@ -16,12 +16,12 @@
 <div class="page-body">
     <div class="container">
 
-        <!-- Apa itu CONCERTO -->
+        <!-- Apa itu ADAPT-CT -->
         <div class="info-banner">
             <i class="bi bi-info-circle-fill info-banner-icon"></i>
             <div>
-                <strong>Apa itu CONCERTO?</strong>
-                <p>CONCERTO merupakan media asesmen adaptif yang dapat digunakan siswa untuk mengerjakan soal berdasarkan kemampuan <em>real-time</em> dan memberikan pengukuran kemampuan berpikir kritis yang lebih akurat. Sistem akan menyesuaikan tingkat kesulitan soal secara otomatis.</p>
+                <strong>Apa itu ADAPT-CT?</strong>
+                <p>ADAPT-CT merupakan media asesmen adaptif yang dapat digunakan siswa untuk mengerjakan soal berdasarkan kemampuan <em>real-time</em> dan memberikan pengukuran kemampuan berpikir kritis yang lebih akurat. Sistem akan menyesuaikan tingkat kesulitan soal secara otomatis.</p>
             </div>
         </div>
 

@@ -7,7 +7,7 @@
         <div>
             <p class="pg-eyebrow">Kelola Pengguna</p>
             <h1 class="pg-title">Tambah Siswa</h1>
-            <p class="pg-sub">Daftarkan akun siswa baru ke dalam sistem CONCERTO.</p>
+            <p class="pg-sub">Daftarkan akun siswa baru ke dalam sistem ADAPT-CT.</p>
         </div>
         <a href="<?= base_url('admin/siswa') ?>" class="btn-back"><i class="bi bi-arrow-left"></i> Kembali</a>
     </div>

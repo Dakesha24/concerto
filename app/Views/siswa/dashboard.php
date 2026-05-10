@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-lg-4 d-none d-lg-block text-center">
-                <img src="<?= base_url('assets/images/heros.png') ?>" alt="Welcome" class="img-fluid hero-img-mini">
+                <img src="<?= base_url('assets/images/icon-adaptct.png') ?>" alt="ADAPT-CT" class="img-fluid hero-img-mini">
             </div>
         </div>
     </div>
@@ -137,8 +137,8 @@
     }
 
     .hero-img-mini {
-        max-height: 170px;
-        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08));
+        max-height: 130px;
+        filter: drop-shadow(0 8px 16px rgba(0,81,186,0.12));
     }
 
     .dashboard-btn {

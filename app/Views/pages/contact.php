@@ -8,7 +8,7 @@
         <p class="page-label">Saran</p>
         <h1 class="page-title">Hubungi Kami</h1>
         <div class="title-accent"></div>
-        <p class="page-desc">Sampaikan kritik dan saran Anda untuk pengembangan CONCERTO</p>
+        <p class="page-desc">Sampaikan kritik dan saran Anda untuk pengembangan ADAPT-CT</p>
     </div>
 </div>
 
@@ -42,7 +42,7 @@
                     </form>
 
                     <div class="form-alt">
-                        atau <a href="mailto:jauzaamalia@upi.edu?subject=Kritik dan Saran CONCERTO">kirim email langsung</a>
+                        atau <a href="mailto:jauzaamalia@upi.edu?subject=Kritik dan Saran ADAPT-CT">kirim email langsung</a>
                     </div>
                 </div>
             </div>
@@ -333,8 +333,8 @@
         const email   = document.getElementById('email').value;
         const message = document.getElementById('message').value;
 
-        const subject = encodeURIComponent('Kritik dan Saran CONCERTO');
-        const body    = encodeURIComponent(`Nama: ${name}\nEmail: ${email}\n\nPesan:\n${message}\n\n---\nDikirim melalui form kontak CONCERTO`);
+        const subject = encodeURIComponent('Kritik dan Saran ADAPT-CT');
+        const body    = encodeURIComponent(`Nama: ${name}\nEmail: ${email}\n\nPesan:\n${message}\n\n---\nDikirim melalui form kontak ADAPT-CT`);
 
         window.location.href = `mailto:jauzaamalia@upi.edu?subject=${subject}&body=${body}`;
 

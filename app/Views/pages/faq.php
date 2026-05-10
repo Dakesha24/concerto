@@ -8,7 +8,7 @@
         <p class="page-label">FAQ</p>
         <h1 class="page-title">Pertanyaan yang Sering Diajukan</h1>
         <div class="title-accent"></div>
-        <p class="page-desc">Temukan jawaban untuk pertanyaan umum seputar CONCERTO</p>
+        <p class="page-desc">Temukan jawaban untuk pertanyaan umum seputar ADAPT-CT</p>
     </div>
 </div>
 

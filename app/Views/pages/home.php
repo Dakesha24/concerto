@@ -7,8 +7,8 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
                 <p class="eyebrow">Platform Asesmen Adaptif Fisika</p>
-                <h1 class="h-title">Selamat Datang di<br><img src="<?= base_url('assets/images/header-concerto.png') ?>" alt="CONCERTO" class="h-title-img"></h1>
-                <p class="h-sub"><em>Computerized Online Network for Critical Thinking Evaluation through Responsive Testing Optimization</em></p>
+                <h1 class="h-title">Selamat Datang di<br><span class="h-title-brand">ADAPT<span class="h-title-accent">-</span>CT</span></h1>
+                <p class="h-sub"><em>Adaptive Computerized Testing for Critical Thinking</em></p>
                 <p class="h-body">Platform asesmen adaptif digital berbasis web menggunakan algortma Computerized Adaptive Testing untuk mengukur Keterampilan berpikir kritis peserta tes pada bidang Fisika secara akurat disertai feedback real-time</p>
                 <div class="h-cta">
                     <a href="<?= base_url('login') ?>" class="btn-solid">Masuk</a>
@@ -17,7 +17,7 @@
             </div>
             <div class="col-lg-6 text-center">
                 <div class="h-img-wrap">
-                    <img src="<?= base_url('assets/images/heros.png') ?>" alt="CONCERTO" class="h-img">
+                    <img src="<?= base_url('assets/images/heros.png') ?>" alt="ADAPT-CT" class="h-img">
                 </div>
             </div>
         </div>
@@ -138,16 +138,18 @@
     letter-spacing: -.5px;
 }
 
-.h-title-img {
-    display: block;
-    max-width: 40%;
-    height: auto;
-    margin: 18px 0 18px 0;
-    padding: 0;
-    filter:
-        drop-shadow(0 0 1px #fff)
-        drop-shadow(0 0 3px #fff)
-        drop-shadow(0 0 8px rgba(255,255,255,.6));
+.h-title-brand {
+    display: inline-block;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: #ffda1a;
+    letter-spacing: -1px;
+    margin: 14px 0 14px 0;
+    text-shadow: 0 0 20px rgba(255,218,26,.3);
+}
+
+.h-title-accent {
+    color: #fff;
 }
 
 .h-sub {
@@ -342,7 +344,7 @@
     .hero { padding: 64px 0 56px; text-align: center; }
     .hero-body, .h-body { max-width: 100%; }
     .h-title { font-size: 1.5rem; }
-    .h-title-img { margin-left: auto; margin-right: auto; }
+    .h-title-brand { font-size: 2rem; }
     .h-cta { justify-content: center; }
     .h-img-wrap { padding: 16px; }
     .h-img { max-width: 100%; margin-bottom: 36px; }

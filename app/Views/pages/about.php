@@ -6,7 +6,7 @@
 <div class="page-header">
     <div class="container">
         <p class="page-label">Tentang Platform</p>
-        <h1 class="page-title">Tentang CONCERTO</h1>
+        <h1 class="page-title">Tentang ADAPT-CT</h1>
         <div class="title-accent"></div>
     </div>
 </div>
@@ -16,13 +16,13 @@
 <div class="page-body">
     <div class="container">
 
-        <!-- Apa itu CONCERTO -->
+        <!-- Apa itu ADAPT-CT -->
         <div class="content-block">
             <div class="row align-items-start g-5">
                 <div class="col-lg-7">
-                    <h2 class="block-title">Apa itu CONCERTO?</h2>
-                    <p class="block-acronym"><em><strong>C</strong>omputerized <strong>O</strong>nline <strong>N</strong>etwork for <strong>C</strong>ritical Thinking <strong>E</strong>valuation through <strong>R</strong>esponsive <strong>T</strong>esting <strong>O</strong>ptimization</em></p>
-                    <p class="block-text">CONCERTO adalah platform asesmen adaptif berbasis web yang menggunakan algoritma <em>Computerized Adaptive Testing</em> (CAT) dan dirancang untuk mengukur kemampuan berpikir kritis peserta tes khususnya pada bidang Fisika secara akurat, efisien, dan adaptif.</p>
+                    <h2 class="block-title">Apa itu ADAPT-CT?</h2>
+                    <p class="block-acronym"><em><strong>A</strong>daptive <strong>D</strong>igital <strong>A</strong>ssessment <strong>P</strong>latform for <strong>T</strong>esting — <strong>C</strong>ritical <strong>T</strong>hinking</em></p>
+                    <p class="block-text">ADAPT-CT adalah platform asesmen adaptif berbasis web yang menggunakan algoritma <em>Computerized Adaptive Testing</em> (CAT) dan dirancang untuk mengukur kemampuan berpikir kritis peserta tes khususnya pada bidang Fisika secara akurat, efisien, dan adaptif.</p>
                     <p class="block-text">Platform ini memanfaatkan teknologi komputer untuk memberikan soal-soal yang secara otomatis menyesuaikan dengan kemampuan peserta tes. Dengan pendekatan adaptif ini, setiap pengguna mendapatkan pengalaman asesmen yang inovatif, menantang, dan relevan dengan tingkat pemahamannya.</p>
                 </div>
                 <div class="col-lg-5">

@@ -7,12 +7,12 @@
     <div class="auth-left-panel">
         <div class="auth-left-content">
             <div class="auth-brand">
-                <div class="auth-brand-icon">C</div>
-                <span class="auth-brand-name">CONCERTO</span>
+                <img src="<?= base_url('assets/images/icon-adaptct.png') ?>" alt="ADAPT-CT" class="auth-brand-logo">
+                <span class="auth-brand-name">ADAPT-CT</span>
             </div>
             <h2 class="auth-left-title">Platform Asesmen Adaptif Fisika</h2>
             <p class="auth-left-desc">
-                <em>Computerized Online Network for Critical Thinking Evaluation through Responsive Testing Optimization</em>
+                <em>Adaptive Digital Assessment Platform for Testing — Critical Thinking</em>
             </p>
             <div class="auth-features">
                 <div class="auth-feature-item">
@@ -35,7 +35,7 @@
     <div class="auth-right-panel">
         <div class="auth-card">
             <div class="auth-card-header">
-                <h2 class="auth-card-title">Masuk ke CONCERTO</h2>
+                <h2 class="auth-card-title">Masuk ke ADAPT-CT</h2>
                 <p class="auth-card-subtitle">Silakan masukkan kredensial akun Anda</p>
             </div>
 
@@ -162,17 +162,10 @@
         margin-bottom: 32px;
     }
 
-    .auth-brand-icon {
-        background: #ffda1a;
-        color: #001a4f;
-        width: 38px;
-        height: 38px;
-        border-radius: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-size: 1.1rem;
+    .auth-brand-logo {
+        height: 36px;
+        width: auto;
+        filter: brightness(0) invert(1);
         flex-shrink: 0;
     }
 

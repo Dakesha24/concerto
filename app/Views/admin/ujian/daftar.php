@@ -7,7 +7,7 @@
         <div>
             <p class="pg-eyebrow">Kelola Konten</p>
             <h1 class="pg-title">Kelola Ujian</h1>
-            <p class="pg-sub">Buat dan kelola ujian beserta pengaturan CONCERTO untuk kelas yang Anda ajar.</p>
+            <p class="pg-sub">Buat dan kelola ujian beserta pengaturan ADAPT-CT untuk kelas yang Anda ajar.</p>
         </div>
         <button type="button" class="btn-pg-action" data-bs-toggle="modal" data-bs-target="#tambahUjianModal">
             <i class="bi bi-plus-lg"></i> Tambah Ujian

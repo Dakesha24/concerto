@@ -180,7 +180,7 @@ class HasilController extends Controller
         }
 
         $hasil = $this->pesertaUjianModel
-            ->select('peserta_ujian.*, jadwal_ujian.*, ujian.*, jenis_ujian.nama_jenis, TIME_TO_SEC(TIMEDIFF(peserta_ujian.waktu_selesai, peserta_ujian.waktu_mulai)) as durasi_total_detik')
+            ->select('peserta_ujian.*, jadwal_ujian.*, ujian.*, jenis_ujian.nama_jenis, TIME_TO_SEC(TIMEDIFF(peserta_ujian.waktu_selesai, peserta_ujian.waktu_mulai)) as durasi_total_detik, DATE_FORMAT(peserta_ujian.waktu_mulai, "%d/%m/%Y %H:%i:%s") as waktu_mulai_format, DATE_FORMAT(peserta_ujian.waktu_selesai, "%d/%m/%Y %H:%i:%s") as waktu_selesai_format')
             ->join('jadwal_ujian', 'jadwal_ujian.jadwal_id = peserta_ujian.jadwal_id')
             ->join('ujian', 'ujian.id_ujian = jadwal_ujian.ujian_id')
             ->join('jenis_ujian', 'jenis_ujian.jenis_ujian_id = ujian.jenis_ujian_id')
@@ -208,6 +208,12 @@ class HasilController extends Controller
         $theta_akhir = $lastResult ? (float)$lastResult['theta_saat_ini'] : 0;
         $ujianId     = (int)$hasil['id_ujian'];
         $skor_akhir  = $this->hitungKemampuanKognitif($theta_akhir, $ujianId);
+        $klasifikasiKognitif = $this->getKlasifikasiKognitif($skor_akhir);
+
+        $durasiDetik = (int)($hasil['durasi_total_detik'] ?? 0);
+        $hasil['durasi_total_format'] = sprintf('%02d:%02d:%02d', floor($durasiDetik / 3600), floor(($durasiDetik % 3600) / 60), $durasiDetik % 60);
+        $rataDetik = $totalSoal > 0 ? (int)floor($durasiDetik / $totalSoal) : 0;
+        $rataRataWaktuFormat = sprintf('%d menit %d detik', floor($rataDetik / 60), $rataDetik % 60);
 
         $data = [
             'hasil'              => $hasil,
@@ -216,7 +222,8 @@ class HasilController extends Controller
             'jawabanBenar'       => $jawabanBenar,
             'siswa'              => $siswa,
             'skor'               => $skor_akhir,
-            'klasifikasiKognitif' => $this->getKlasifikasiKognitif($skor_akhir),
+            'klasifikasiKognitif' => $klasifikasiKognitif,
+            'rataRataWaktuFormat' => $rataRataWaktuFormat,
             'kemampuanKognitif'  => ['skor' => $skor_akhir, 'total_benar' => $jawabanBenar, 'total_salah' => $totalSoal - $jawabanBenar, 'rata_rata_pilihan' => 0],
         ];
 

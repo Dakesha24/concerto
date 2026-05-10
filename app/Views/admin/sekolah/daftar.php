@@ -8,7 +8,7 @@
         <div>
             <p class="pg-eyebrow">Kelola Institusi</p>
             <h1 class="pg-title">Kelola Sekolah</h1>
-            <p class="pg-sub">Daftar seluruh sekolah yang terdaftar dalam sistem CONCERTO.</p>
+            <p class="pg-sub">Daftar seluruh sekolah yang terdaftar dalam sistem ADAPT-CT.</p>
         </div>
         <a href="<?= base_url('admin/sekolah/tambah') ?>" class="btn-pg-action">
             <i class="bi bi-plus-lg"></i> Tambah Sekolah

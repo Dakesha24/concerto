@@ -7,10 +7,10 @@
     <div class="auth-left-panel">
         <div class="auth-left-content">
             <div class="auth-brand">
-                <div class="auth-brand-icon">C</div>
-                <span class="auth-brand-name">CONCERTO</span>
+                <img src="<?= base_url('assets/images/icon-adaptct.png') ?>" alt="ADAPT-CT" class="auth-brand-logo">
+                <span class="auth-brand-name">ADAPT-CT</span>
             </div>
-            <h2 class="auth-left-title">Bergabunglah dengan CONCERTO</h2>
+            <h2 class="auth-left-title">Bergabunglah dengan ADAPT-CT</h2>
             <p class="auth-left-desc">
                 Daftarkan diri Anda dan mulai pengalaman asesmen adaptif Fisika yang akurat dan efisien.
             </p>
@@ -36,7 +36,7 @@
         <div class="auth-card">
             <div class="auth-card-header">
                 <h2 class="auth-card-title">Buat Akun Baru</h2>
-                <p class="auth-card-subtitle">Isi form berikut untuk mendaftar ke CONCERTO</p>
+                <p class="auth-card-subtitle">Isi form berikut untuk mendaftar ke ADAPT-CT</p>
             </div>
 
             <?php if (session()->getFlashdata('errors')): ?>
@@ -158,17 +158,10 @@
         margin-bottom: 32px;
     }
 
-    .auth-brand-icon {
-        background: #ffda1a;
-        color: #001a4f;
-        width: 38px;
-        height: 38px;
-        border-radius: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-size: 1.1rem;
+    .auth-brand-logo {
+        height: 36px;
+        width: auto;
+        filter: brightness(0) invert(1);
         flex-shrink: 0;
     }
 

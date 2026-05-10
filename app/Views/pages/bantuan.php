@@ -8,7 +8,7 @@
         <p class="page-label">Bantuan</p>
         <h1 class="page-title">Pusat Bantuan</h1>
         <div class="title-accent"></div>
-        <p class="page-desc">Temukan solusi untuk kendala yang Anda hadapi di CONCERTO</p>
+        <p class="page-desc">Temukan solusi untuk kendala yang Anda hadapi di ADAPT-CT</p>
     </div>
 </div>
 
@@ -294,7 +294,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const link = document.getElementById('teknis-platform-link');
-        link.href = 'https://bit.ly/PanduanCONCERTO';
+        link.href = 'https://bit.ly/PanduanADAPTCT';
         link.target = '_blank';
     });
 </script>

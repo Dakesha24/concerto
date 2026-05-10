@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Siswa - adaptct</title>
+    <title>Dashboard Siswa - ADAPT-CT</title>
 
     <link rel="icon" type="image/png" href="<?= base_url('assets/images/icon-adaptct.png') ?>">
     <link rel="apple-touch-icon" href="<?= base_url('assets/images/icon-adaptct.png') ?>">
@@ -65,6 +65,16 @@
             font-size: 1.4rem;
             letter-spacing: 1px;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .main-navbar .navbar-brand .navbar-brand-logo {
+            height: 24px;
+            width: auto;
+            filter: brightness(0) invert(1);
         }
 
         .main-navbar .navbar-brand span {
@@ -251,8 +261,8 @@
                     <i class="bi bi-list fs-4"></i>
                 </button>
                 <a class="navbar-brand" href="<?= base_url('siswa/dashboard') ?>">
-                    <i class="bi bi-mortarboard-fill me-2"></i>
-                    <span>adaptct</span>
+                    <img src="<?= base_url('assets/images/icon-adaptct.png') ?>" alt="ADAPT-CT" class="navbar-brand-logo">
+                    <span>ADAPT-CT</span>
                 </a>
             </div>
 
@@ -270,7 +280,7 @@
                         <li>
                             <h6 class="dropdown-header">Bantuan</h6>
                         </li>
-                        <li><a class="dropdown-item" href="https://bit.ly/PanduanPenggunaanPhy-FA-CAT-Siswa" target="_blank">
+                        <li><a class="dropdown-item" href="#" target="_blank">
                                 <i class="bi bi-file-earmark-text me-2"></i> Panduan Siswa
                             </a></li>
                     </ul>
