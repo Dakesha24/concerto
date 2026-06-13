@@ -192,7 +192,7 @@ class HasilController extends Controller
         }
 
         $detailJawaban = $this->hasilUjianModel
-            ->select('hasil_ujian.*, soal_ujian.pertanyaan, soal_ujian.jawaban_benar')
+            ->select('hasil_ujian.*, soal_ujian.pertanyaan, soal_ujian.kode_soal, soal_ujian.jawaban_benar, soal_ujian.pembahasan, DATE_FORMAT(hasil_ujian.waktu_menjawab, "%H:%i:%s") as waktu_menjawab_format')
             ->join('soal_ujian', 'soal_ujian.soal_id = hasil_ujian.soal_id')
             ->where('hasil_ujian.peserta_ujian_id', $pesertaUjianId)
             ->orderBy('hasil_ujian.waktu_menjawab', 'ASC')
